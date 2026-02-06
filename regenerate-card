@@ -1,0 +1,600 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Regenerate Lost Card</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f8f9fa;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .app-header {
+      background: #151556;
+      color: white;
+      padding: 16px 20px;
+      text-align: center;
+    }
+
+    .app-title {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .app-subtitle {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+
+    /* PIN Screen */
+    .pin-screen {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .pin-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      padding: 40px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .pin-card h2 {
+      color: #151556;
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .pin-card p {
+      color: #6c757d;
+      margin-bottom: 24px;
+    }
+
+    .pin-input {
+      width: 100%;
+      padding: 16px;
+      font-size: 24px;
+      text-align: center;
+      border: 2px solid #e9ecef;
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      letter-spacing: 8px;
+      margin-bottom: 16px;
+    }
+
+    .pin-input:focus {
+      outline: none;
+      border-color: #00BDFF;
+    }
+
+    .pin-error {
+      color: #FF3B3B;
+      font-size: 14px;
+      margin-top: -8px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      transition: background 0.2s;
+    }
+
+    .btn-primary {
+      background: #00BDFF;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0099cc;
+    }
+
+    .btn-secondary {
+      background: #e9ecef;
+      color: #151556;
+      margin-top: 12px;
+    }
+
+    .btn-secondary:hover {
+      background: #dee2e6;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 24px;
+      display: none;
+    }
+
+    .main-content.active {
+      display: block;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Search Box */
+    .search-section {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 24px;
+    }
+
+    .search-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #151556;
+      margin-bottom: 16px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 16px;
+      border: 2px solid #e9ecef;
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      margin-bottom: 12px;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #00BDFF;
+    }
+
+    /* Results */
+    .results-section {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 24px;
+      display: none;
+    }
+
+    .results-section.active {
+      display: block;
+    }
+
+    .result-item {
+      padding: 16px;
+      border-bottom: 1px solid #e9ecef;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .result-item:hover {
+      background: #f8f9fa;
+    }
+
+    .result-item:last-child {
+      border-bottom: none;
+    }
+
+    .result-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #151556;
+      margin-bottom: 4px;
+    }
+
+    .result-details {
+      font-size: 14px;
+      color: #6c757d;
+    }
+
+    /* Confirmation Section */
+    .confirmation-section {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: none;
+    }
+
+    .confirmation-section.active {
+      display: block;
+    }
+
+    .household-info {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: #151556;
+    }
+
+    .info-value {
+      color: #6c757d;
+    }
+
+    .warning-box {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .warning-title {
+      font-weight: 700;
+      color: #856404;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .warning-text {
+      color: #856404;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Success Section */
+    .success-section {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: none;
+      text-align: center;
+    }
+
+    .success-section.active {
+      display: block;
+    }
+
+    .success-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+
+    .success-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #28a745;
+      margin-bottom: 8px;
+    }
+
+    .success-subtitle {
+      color: #6c757d;
+      margin-bottom: 24px;
+    }
+
+    .card-url-box {
+      background: #f8f9fa;
+      border: 2px solid #e9ecef;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 16px;
+      word-break: break-all;
+      font-size: 14px;
+      color: #151556;
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Loading State */
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* Back Link */
+    .back-link {
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    .back-link a {
+      color: #00BDFF;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .button-group {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="app-header">
+    <div class="app-title">Regenerate Lost Card</div>
+    <div class="app-subtitle">Issue new QR code for lost cards</div>
+  </div>
+
+  <!-- PIN Screen -->
+  <div class="pin-screen" id="pinScreen">
+    <div class="pin-card">
+      <h2>Staff Access</h2>
+      <p>Enter your PIN to continue</p>
+      <input 
+        type="password" 
+        class="pin-input" 
+        id="pinInput" 
+        maxlength="4" 
+        placeholder="••••"
+        autocomplete="off"
+      />
+      <div class="pin-error" id="pinError">Incorrect PIN. Please try again.</div>
+      <button class="btn btn-primary" onclick="checkPin()">Continue</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <div class="container">
+      <!-- Search Section -->
+      <div class="search-section">
+        <div class="search-title">Search for Household</div>
+        <input 
+          type="text" 
+          class="search-input" 
+          id="searchInput" 
+          placeholder="Enter name, phone, or address..."
+          onkeyup="handleSearch(event)"
+        />
+        <button class="btn btn-primary" onclick="searchHouseholds()">Search</button>
+      </div>
+
+      <!-- Results Section -->
+      <div class="results-section" id="resultsSection">
+        <div class="search-title">Search Results</div>
+        <div id="resultsList"></div>
+      </div>
+
+      <!-- Confirmation Section -->
+      <div class="confirmation-section" id="confirmationSection">
+        <div class="search-title">Confirm Regeneration</div>
+        <div class="household-info" id="householdInfo"></div>
+        <div class="warning-box">
+          <div class="warning-title">
+            ⚠️ Warning
+          </div>
+          <div class="warning-text">
+            Generating a new card will immediately invalidate the old QR code. The household will need the new card URL to check in.
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="regenerateCard()">Generate New Card</button>
+        <button class="btn btn-secondary" onclick="cancelRegeneration()">Cancel</button>
+      </div>
+
+      <!-- Success Section -->
+      <div class="success-section" id="successSection">
+        <div class="success-icon">✅</div>
+        <div class="success-title">Card Regenerated!</div>
+        <div class="success-subtitle">Old QR code is now invalid</div>
+        <div class="card-url-box" id="cardUrlDisplay"></div>
+        <div class="button-group">
+          <button class="btn btn-primary" onclick="copyCardURL()">Copy Link</button>
+          <button class="btn btn-secondary" onclick="resetForm()">Done</button>
+        </div>
+      </div>
+
+      <div class="back-link">
+        <a href="index.html">← Back to Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+    const CORRECT_PIN = "2026";
+    let selectedContactId = null;
+    let selectedHouseholdName = null;
+    let newCardURL = null;
+
+    // PIN Authentication
+    function checkPin() {
+      const pin = document.getElementById('pinInput').value;
+      const pinError = document.getElementById('pinError');
+      
+      if (pin === CORRECT_PIN) {
+        document.getElementById('pinScreen').style.display = 'none';
+        document.getElementById('mainContent').classList.add('active');
+      } else {
+        pinError.style.display = 'block';
+        document.getElementById('pinInput').value = '';
+        setTimeout(() => {
+          pinError.style.display = 'none';
+        }, 3000);
+      }
+    }
+
+    // Enter key on PIN
+    document.getElementById('pinInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        checkPin();
+      }
+    });
+
+    // Search
+    function handleSearch(e) {
+      if (e.key === 'Enter') {
+        searchHouseholds();
+      }
+    }
+
+    async function searchHouseholds() {
+      const query = document.getElementById('searchInput').value.trim();
+      
+      if (!query || query.length < 2) {
+        alert('Please enter at least 2 characters');
+        return;
+      }
+
+      const resultsSection = document.getElementById('resultsSection');
+      const resultsList = document.getElementById('resultsList');
+      
+      resultsList.innerHTML = '<p style="color: #6c757d;">Searching...</p>';
+      resultsSection.classList.add('active');
+
+      try {
+        const response = await fetch(`${API_URL}?action=search&query=${encodeURIComponent(query)}`);
+        const data = await response.json();
+
+        if (data.results && data.results.length > 0) {
+          resultsList.innerHTML = '';
+          data.results.forEach(result => {
+            const item = document.createElement('div');
+            item.className = 'result-item';
+            item.onclick = () => selectHousehold(result);
+            item.innerHTML = `
+              <div class="result-name">${result.name}</div>
+              <div class="result-details">${result.phone || 'No phone'} • ${result.address || 'No address'}</div>
+            `;
+            resultsList.appendChild(item);
+          });
+        } else {
+          resultsList.innerHTML = '<p style="color: #6c757d;">No results found. Try a different search.</p>';
+        }
+      } catch (error) {
+        console.error('Search error:', error);
+        resultsList.innerHTML = '<p style="color: #FF3B3B;">Error searching. Please try again.</p>';
+      }
+    }
+
+    function selectHousehold(result) {
+      selectedContactId = result.contactId;
+      selectedHouseholdName = result.name;
+
+      const householdInfo = document.getElementById('householdInfo');
+      householdInfo.innerHTML = `
+        <div class="info-row">
+          <span class="info-label">Household:</span>
+          <span class="info-value">${result.name}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Phone:</span>
+          <span class="info-value">${result.phone || 'N/A'}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Address:</span>
+          <span class="info-value">${result.address || 'N/A'}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Current Token:</span>
+          <span class="info-value">${result.token || 'N/A'}</span>
+        </div>
+      `;
+
+      document.getElementById('resultsSection').style.display = 'none';
+      document.getElementById('confirmationSection').classList.add('active');
+    }
+
+    async function regenerateCard() {
+      if (!selectedContactId) return;
+
+      const btn = event.target;
+      btn.classList.add('loading');
+      btn.textContent = 'Generating...';
+
+      try {
+        const response = await fetch(`${API_URL}?action=regenerateCard&id=${selectedContactId}`);
+        const data = await response.json();
+
+        if (data.success) {
+          newCardURL = data.cardURL;
+          document.getElementById('cardUrlDisplay').textContent = newCardURL;
+          document.getElementById('confirmationSection').style.display = 'none';
+          document.getElementById('successSection').classList.add('active');
+        } else {
+          alert('Error: ' + (data.error || 'Failed to regenerate card'));
+          btn.classList.remove('loading');
+          btn.textContent = 'Generate New Card';
+        }
+      } catch (error) {
+        console.error('Regeneration error:', error);
+        alert('Error generating new card. Please try again.');
+        btn.classList.remove('loading');
+        btn.textContent = 'Generate New Card';
+      }
+    }
+
+    function copyCardURL() {
+      if (!newCardURL) return;
+      
+      navigator.clipboard.writeText(newCardURL).then(() => {
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.style.background = '#28a745';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = '';
+        }, 2000);
+      }).catch(err => {
+        alert('Failed to copy. Please copy manually.');
+      });
+    }
+
+    function cancelRegeneration() {
+      document.getElementById('confirmationSection').style.display = 'none';
+      document.getElementById('resultsSection').classList.add('active');
+    }
+
+    function resetForm() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('resultsSection').style.display = 'none';
+      document.getElementById('successSection').style.display = 'none';
+      selectedContactId = null;
+      selectedHouseholdName = null;
+      newCardURL = null;
+    }
+  </script>
+</body>
+</html>
