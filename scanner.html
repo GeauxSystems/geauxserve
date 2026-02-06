@@ -1,0 +1,1486 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Staff Scanner Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Poppins', sans-serif;
+        background: #f8f9fa;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Header */
+      .app-header {
+        background: #151556;
+        color: white;
+        padding: 16px 20px;
+        text-align: center;
+      }
+
+      .app-title {
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .app-subtitle {
+        font-size: 13px;
+        opacity: 0.9;
+        margin-top: 4px;
+      }
+
+      /* PIN Screen */
+      .pin-screen {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+
+      .pin-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        padding: 40px;
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .pin-card h2 {
+        color: #151556;
+        font-size: 24px;
+        margin-bottom: 12px;
+      }
+
+      .pin-card p {
+        color: #6c757d;
+        margin-bottom: 24px;
+      }
+
+      .pin-input {
+        width: 100%;
+        padding: 16px;
+        font-size: 24px;
+        text-align: center;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        letter-spacing: 8px;
+        margin-bottom: 16px;
+      }
+
+      .pin-input:focus {
+        outline: none;
+        border-color: #00BDFF;
+      }
+
+      .pin-error {
+        color: #FF3B3B;
+        font-size: 14px;
+        margin-top: -8px;
+        margin-bottom: 16px;
+        display: none;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 16px;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.2s;
+      }
+
+      .btn-primary {
+        background: #00BDFF;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #0099cc;
+      }
+
+      .btn-primary:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Scanner Screen */
+      .scanner-screen {
+        display: none;
+        flex: 1;
+        flex-direction: column;
+      }
+
+      .scanner-screen.active {
+        display: flex;
+      }
+
+      /* Timeout Warning */
+      .timeout-warning {
+        background: #FFC107;
+        color: #000;
+        padding: 12px 20px;
+        text-align: center;
+        font-weight: 600;
+        display: none;
+      }
+
+      .timeout-warning.active {
+        display: block;
+      }
+
+      /* Mode Toggle */
+      .mode-toggle {
+        background: white;
+        padding: 16px 20px;
+        border-bottom: 1px solid #e9ecef;
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .mode-btn {
+        padding: 12px 24px;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        background: white;
+        color: #6c757d;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        transition: all 0.2s;
+      }
+
+      .mode-btn.active {
+        background: #151556;
+        color: white;
+        border-color: #151556;
+      }
+
+      /* Main Areas */
+      .scanner-main, .manual-main {
+        flex: 1;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+        overflow-y: auto;
+      }
+
+      .manual-main {
+        display: none;
+      }
+
+      .manual-main.active {
+        display: flex;
+      }
+
+      .scanner-main.active {
+        display: flex;
+      }
+
+      .scanner-main.hidden {
+        display: none;
+      }
+
+      /* Scanner Button */
+      .scan-button {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: #00BDFF;
+        color: white;
+        font-size: 18px;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 8px 30px rgba(0,189,255,0.3);
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .scan-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 40px rgba(0,189,255,0.4);
+      }
+
+      .scan-button:active {
+        transform: scale(0.95);
+      }
+
+      .scan-icon {
+        font-size: 48px;
+      }
+
+      /* Manual Search Interface */
+      .search-box {
+        width: 100%;
+        max-width: 500px;
+        position: relative;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 16px 48px 16px 16px;
+        font-size: 16px;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: #00BDFF;
+      }
+
+      .search-btn {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #00BDFF;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .search-results {
+        width: 100%;
+        max-width: 500px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        max-height: 300px;
+        overflow-y: auto;
+        display: none;
+      }
+
+      .search-results.active {
+        display: block;
+      }
+
+      .search-result-item {
+        padding: 16px;
+        border-bottom: 1px solid #e9ecef;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .search-result-item:hover {
+        background: #f8f9fa;
+      }
+
+      .search-result-item:last-child {
+        border-bottom: none;
+      }
+
+      .result-name {
+        font-weight: 600;
+        color: #151556;
+        margin-bottom: 4px;
+      }
+
+      .result-details {
+        font-size: 14px;
+        color: #6c757d;
+      }
+
+      .no-results {
+        padding: 32px;
+        text-align: center;
+        color: #6c757d;
+      }
+
+      /* Household Details Card */
+      .household-card {
+        width: 100%;
+        max-width: 500px;
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        display: none;
+      }
+
+      .household-card.active {
+        display: block;
+      }
+
+      .household-header {
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 16px;
+        margin-bottom: 16px;
+      }
+
+      .household-name {
+        font-size: 20px;
+        font-weight: 700;
+        color: #151556;
+        margin-bottom: 8px;
+      }
+
+      .household-address {
+        color: #6c757d;
+        font-size: 14px;
+      }
+
+      .household-info {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .info-label {
+        color: #6c757d;
+        font-size: 14px;
+      }
+
+      .info-value {
+        font-weight: 600;
+        color: #151556;
+      }
+
+      .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .status-eligible {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .status-warning {
+        background: #fff3cd;
+        color: #856404;
+      }
+
+      .status-denied {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .btn-action {
+        flex: 1;
+        padding: 14px;
+        font-size: 15px;
+        font-weight: 600;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.2s;
+      }
+
+      .btn-checkin {
+        background: #28a745;
+        color: white;
+      }
+
+      .btn-checkin:hover {
+        background: #218838;
+      }
+
+      .btn-serve {
+        background: #00BDFF;
+        color: white;
+      }
+
+      .btn-serve:hover {
+        background: #0099cc;
+      }
+
+      .btn-action:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .warning-message {
+        background: #fff3cd;
+        border: 1px solid #ffc107;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 16px;
+        font-size: 14px;
+        color: #856404;
+      }
+
+      .error-message {
+        background: #f8d7da;
+        border: 1px solid #dc3545;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 16px;
+        font-size: 14px;
+        color: #721c24;
+      }
+
+      /* Stats */
+      .stats-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 500px;
+      }
+
+      .stat-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .stat-row:last-child {
+        border-bottom: none;
+      }
+
+      .stat-label {
+        color: #6c757d;
+        font-size: 14px;
+      }
+
+      .stat-value {
+        color: #151556;
+        font-weight: 600;
+        font-size: 16px;
+      }
+
+      /* Result Display */
+      .result-display {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 500px;
+        min-height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .result-display.success {
+        background: #d4edda;
+        border: 2px solid #28a745;
+      }
+
+      .result-display.error {
+        background: #f8d7da;
+        border: 2px solid #dc3545;
+      }
+
+      .result-display.info {
+        background: #fff3cd;
+        border: 2px solid #ffc107;
+      }
+
+      .result-display.loading {
+        background: white;
+      }
+
+      .result-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+      }
+
+      .result-text {
+        font-size: 18px;
+        font-weight: 600;
+        color: #151556;
+        margin-bottom: 4px;
+      }
+
+      .result-subtext {
+        font-size: 14px;
+        color: #6c757d;
+      }
+
+      /* History */
+      .history-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 500px;
+      }
+
+      .history-title {
+        font-weight: 600;
+        color: #151556;
+        margin-bottom: 16px;
+        font-size: 16px;
+      }
+
+      .history-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .history-item:last-child {
+        border-bottom: none;
+      }
+
+      .history-name {
+        font-weight: 600;
+        color: #151556;
+        font-size: 14px;
+      }
+
+      .history-action {
+        font-size: 13px;
+        color: #6c757d;
+      }
+
+      .history-time {
+        font-size: 13px;
+        color: #6c757d;
+      }
+
+      /* Footer */
+      .scanner-footer {
+        background: white;
+        border-top: 1px solid #e9ecef;
+        padding: 16px 20px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .btn-logout {
+        background: #FF3B3B;
+        color: white;
+        padding: 12px 32px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.2s;
+      }
+
+      .btn-logout:hover {
+        background: #cc0000;
+      }
+
+      /* Video Scanner Overlay */
+      .video-scanner {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.95);
+        z-index: 1000;
+        display: none;
+        flex-direction: column;
+      }
+
+      .video-scanner.active {
+        display: flex;
+      }
+
+      .video-header {
+        background: #151556;
+        color: white;
+        padding: 16px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .close-scanner {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 28px;
+        cursor: pointer;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+      }
+
+      .video-container {
+        flex: 1;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      #video {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+
+      .scanner-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 280px;
+        height: 280px;
+        border: 3px solid #00BDFF;
+        border-radius: 16px;
+        box-shadow: 0 0 0 99999px rgba(0,0,0,0.5);
+      }
+
+      .scanner-instructions {
+        position: absolute;
+        bottom: 60px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        color: white;
+        font-size: 16px;
+        padding: 0 20px;
+      }
+
+      .camera-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+
+      /* Loading Spinner */
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #e9ecef;
+        border-top-color: #00BDFF;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      /* Responsive */
+      @media (max-width: 600px) {
+        .mode-toggle {
+          padding: 12px 16px;
+        }
+
+        .mode-btn {
+          padding: 10px 16px;
+          font-size: 13px;
+        }
+
+        .scan-button {
+          width: 160px;
+          height: 160px;
+          font-size: 16px;
+        }
+
+        .scan-icon {
+          font-size: 40px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="app-header">
+      <div class="app-title">Geaux Serve Scanner</div>
+      <div class="app-subtitle">Little Zion Community Outreach</div>
+    </div>
+
+    <!-- PIN Screen -->
+    <div class="pin-screen" id="pinScreen">
+      <div class="pin-card">
+        <h2>Staff Access</h2>
+        <p>Enter your PIN to continue</p>
+        <input type="tel" class="pin-input" id="pinInput" placeholder="****" maxlength="4" />
+        <div class="pin-error" id="pinError">Incorrect PIN. Please try again.</div>
+        <button class="btn btn-primary" id="pinSubmit">Unlock Scanner</button>
+      </div>
+    </div>
+
+    <!-- Scanner Screen -->
+    <div class="scanner-screen" id="scannerScreen">
+      <!-- Timeout Warning -->
+      <div class="timeout-warning" id="timeoutWarning">
+        ⚠️ Session will timeout in <span id="timeoutCountdown">1</span> minute. Scan a code to stay active.
+      </div>
+
+      <!-- Mode Toggle -->
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="scannerModeBtn" data-mode="scanner">
+          📷 Scanner Mode
+        </button>
+        <button class="mode-btn" id="manualModeBtn" data-mode="manual">
+          🔍 Manual Search
+        </button>
+        <div style="width: 100%; height: 1px; background: #e9ecef; margin: 8px 0;"></div>
+        <button class="mode-btn active" id="checkInMode" data-mode="checkin">
+          Check-In
+        </button>
+        <button class="mode-btn" id="serveMode" data-mode="serve">
+          Serve
+        </button>
+      </div>
+
+      <!-- Scanner Main Area -->
+      <div class="scanner-main active" id="scannerMain">
+        <!-- Scan Button -->
+        <button class="scan-button" id="scanButton">
+          <div class="scan-icon">📷</div>
+          <div>SCAN QR CODE</div>
+        </button>
+
+        <!-- Stats -->
+        <div class="stats-card">
+          <div class="stat-row">
+            <span class="stat-label">Check-Ins Today</span>
+            <span class="stat-value" id="checkInCount">0</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Served Today</span>
+            <span class="stat-value" id="servedCount">0</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Current Action</span>
+            <span class="stat-value" id="currentMode">Check-In</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Session Time</span>
+            <span class="stat-value" id="sessionTime">0m 0s</span>
+          </div>
+        </div>
+
+        <!-- Result Display -->
+        <div class="result-display" id="resultDisplay">
+          <div>
+            <div class="result-text">Ready to scan</div>
+            <div class="result-subtext">Tap the button above to start</div>
+          </div>
+        </div>
+
+        <!-- Scan History -->
+        <div class="history-card">
+          <div class="history-title">Recent Scans</div>
+          <div id="historyList">
+            <div style="color: #6c757d; text-align: center; padding: 20px; font-size: 14px;">
+              No scans yet
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Manual Search Main Area -->
+      <div class="manual-main" id="manualMain">
+        <!-- Search Box -->
+        <div class="search-box">
+          <input type="text" class="search-input" id="searchInput" placeholder="Search by name, phone, or address..." />
+          <button class="search-btn" id="searchBtn">Search</button>
+        </div>
+
+        <!-- Search Results -->
+        <div class="search-results" id="searchResults">
+          <!-- Results populated by JavaScript -->
+        </div>
+
+        <!-- Household Details -->
+        <div class="household-card" id="householdCard">
+          <!-- Populated by JavaScript when household is selected -->
+        </div>
+
+        <!-- Stats (same as scanner) -->
+        <div class="stats-card">
+          <div class="stat-row">
+            <span class="stat-label">Check-Ins Today</span>
+            <span class="stat-value" id="checkInCount2">0</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Served Today</span>
+            <span class="stat-value" id="servedCount2">0</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Current Action</span>
+            <span class="stat-value" id="currentMode2">Check-In</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="scanner-footer">
+        <button class="btn-logout" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+
+    <!-- Video Scanner Overlay -->
+    <div class="video-scanner" id="videoScanner">
+      <div class="video-header">
+        <div style="font-weight: 600; font-size: 16px;">Scanning QR Code</div>
+        <button class="close-scanner" id="closeScanner">×</button>
+      </div>
+      <div class="video-container">
+        <video id="video" autoplay playsinline></video>
+        <div class="scanner-overlay"></div>
+        <div class="scanner-instructions">Position QR code within the frame</div>
+      </div>
+    </div>
+
+    <!-- jsQR Library -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+
+    <script>
+      // Configuration
+      const CORRECT_PIN = "2026";
+      const TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
+      const WARNING_MS = 14 * 60 * 1000; // 14 minutes
+      const API_URL = "https://script.google.com/macros/s/AKfycbxaf_vQoT_63-VR1uE09LMBIw6zOuquyPqAkEh_uqsnefp2FTBzxnhz58HeMv0Jb30-/exec";
+
+      // DOM Elements
+      const pinScreen = document.getElementById('pinScreen');
+      const pinInput = document.getElementById('pinInput');
+      const pinSubmit = document.getElementById('pinSubmit');
+      const pinError = document.getElementById('pinError');
+      
+      const scannerScreen = document.getElementById('scannerScreen');
+      const timeoutWarning = document.getElementById('timeoutWarning');
+      const timeoutCountdown = document.getElementById('timeoutCountdown');
+      
+      const scannerModeBtn = document.getElementById('scannerModeBtn');
+      const manualModeBtn = document.getElementById('manualModeBtn');
+      const checkInModeBtn = document.getElementById('checkInMode');
+      const serveModeBtn = document.getElementById('serveMode');
+      
+      const scannerMain = document.getElementById('scannerMain');
+      const manualMain = document.getElementById('manualMain');
+      
+      const scanButton = document.getElementById('scanButton');
+      const videoScanner = document.getElementById('videoScanner');
+      const video = document.getElementById('video');
+      const closeScanner = document.getElementById('closeScanner');
+      
+      const searchInput = document.getElementById('searchInput');
+      const searchBtn = document.getElementById('searchBtn');
+      const searchResults = document.getElementById('searchResults');
+      const householdCard = document.getElementById('householdCard');
+      
+      const checkInCountEl = document.getElementById('checkInCount');
+      const servedCountEl = document.getElementById('servedCount');
+      const currentModeEl = document.getElementById('currentMode');
+      const sessionTimeEl = document.getElementById('sessionTime');
+      const checkInCountEl2 = document.getElementById('checkInCount2');
+      const servedCountEl2 = document.getElementById('servedCount2');
+      const currentModeEl2 = document.getElementById('currentMode2');
+      
+      const resultDisplay = document.getElementById('resultDisplay');
+      const historyList = document.getElementById('historyList');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      // State
+      let authenticated = false;
+      let currentInterfaceMode = 'scanner'; // 'scanner' or 'manual'
+      let currentMode = 'checkin'; // 'checkin' or 'serve'
+      let checkInCount = 0;
+      let serveCount = 0;
+      let scanHistory = [];
+      let sessionStartTime = null;
+      let sessionTimeInterval = null;
+      let idleTimer = null;
+      let warningTimer = null;
+      let stream = null;
+      let scanningActive = false;
+      let selectedHousehold = null;
+
+      // Load session data on page load
+      loadSessionData();
+
+      // PIN Authentication
+      pinInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') pinSubmit.click();
+      });
+
+      pinSubmit.addEventListener('click', () => {
+        const pin = pinInput.value;
+        if (pin === CORRECT_PIN) {
+          authenticated = true;
+          pinScreen.style.display = 'none';
+          scannerScreen.classList.add('active');
+          sessionStartTime = Date.now();
+          startSessionTimer();
+          startIdleTimer();
+          loadSessionData();
+        } else {
+          pinError.style.display = 'block';
+          pinInput.value = '';
+          pinInput.focus();
+        }
+      });
+
+      // Session Timer
+      function startSessionTimer() {
+        sessionTimeInterval = setInterval(() => {
+          const elapsed = Date.now() - sessionStartTime;
+          const minutes = Math.floor(elapsed / 60000);
+          const seconds = Math.floor((elapsed % 60000) / 1000);
+          sessionTimeEl.textContent = minutes + 'm ' + seconds + 's';
+        }, 1000);
+      }
+
+      // Idle Timer
+      function startIdleTimer() {
+        resetIdleTimer();
+      }
+
+      function resetIdleTimer() {
+        if (!authenticated) return;
+        
+        clearTimeout(idleTimer);
+        clearTimeout(warningTimer);
+        timeoutWarning.classList.remove('active');
+
+        warningTimer = setTimeout(() => {
+          timeoutWarning.classList.add('active');
+          let countdown = 60;
+          timeoutCountdown.textContent = countdown;
+          
+          const countdownInterval = setInterval(() => {
+            countdown--;
+            timeoutCountdown.textContent = countdown;
+            if (countdown <= 0) {
+              clearInterval(countdownInterval);
+            }
+          }, 1000);
+        }, WARNING_MS);
+
+        idleTimer = setTimeout(() => {
+          logout();
+        }, TIMEOUT_MS);
+      }
+
+      // Interface Mode Toggle (Scanner vs Manual)
+      scannerModeBtn.addEventListener('click', () => setInterfaceMode('scanner'));
+      manualModeBtn.addEventListener('click', () => setInterfaceMode('manual'));
+
+      function setInterfaceMode(mode) {
+        currentInterfaceMode = mode;
+        resetIdleTimer();
+        
+        if (mode === 'scanner') {
+          scannerModeBtn.classList.add('active');
+          manualModeBtn.classList.remove('active');
+          scannerMain.classList.add('active');
+          scannerMain.classList.remove('hidden');
+          manualMain.classList.remove('active');
+        } else {
+          manualModeBtn.classList.add('active');
+          scannerModeBtn.classList.remove('active');
+          manualMain.classList.add('active');
+          scannerMain.classList.remove('active');
+          scannerMain.classList.add('hidden');
+        }
+      }
+
+      // Action Mode Toggle (Check-In vs Serve)
+      checkInModeBtn.addEventListener('click', () => setMode('checkin'));
+      serveModeBtn.addEventListener('click', () => setMode('serve'));
+
+      function setMode(mode) {
+        currentMode = mode;
+        resetIdleTimer();
+        
+        if (mode === 'checkin') {
+          checkInModeBtn.classList.add('active');
+          serveModeBtn.classList.remove('active');
+          currentModeEl.textContent = 'Check-In';
+          currentModeEl2.textContent = 'Check-In';
+        } else {
+          serveModeBtn.classList.add('active');
+          checkInModeBtn.classList.remove('active');
+          currentModeEl.textContent = 'Serve';
+          currentModeEl2.textContent = 'Serve';
+        }
+        saveSessionData();
+      }
+
+      // Scanner
+      scanButton.addEventListener('click', openScanner);
+      closeScanner.addEventListener('click', closeVideoScanner);
+
+      async function openScanner() {
+        resetIdleTimer();
+        
+        videoScanner.classList.add('active');
+        video.style.display = 'none';
+        document.querySelector('.scanner-overlay').style.display = 'none';
+        document.querySelector('.scanner-instructions').innerHTML = '<div class="camera-loading"><div class="spinner"></div>Initializing camera...</div>';
+        
+        try {
+          const constraints = {
+            video: {
+              facingMode: 'environment',
+              width: { ideal: 1280 },
+              height: { ideal: 720 }
+            }
+          };
+          
+          stream = await navigator.mediaDevices.getUserMedia(constraints);
+          video.srcObject = stream;
+          
+          await new Promise((resolve) => {
+            video.onloadedmetadata = () => {
+              video.play();
+              resolve();
+            };
+          });
+          
+          video.style.display = 'block';
+          document.querySelector('.scanner-overlay').style.display = 'block';
+          document.querySelector('.scanner-instructions').innerHTML = 'Position QR code within the frame';
+          
+          scanningActive = true;
+          
+          setTimeout(() => {
+            scanFrame();
+          }, 500);
+          
+        } catch (err) {
+          console.error('Camera error:', err);
+          videoScanner.classList.remove('active');
+          
+          let errorMsg = 'Camera access denied';
+          if (err.name === 'NotAllowedError') {
+            errorMsg = 'Camera permission denied. Please enable camera access in your browser settings.';
+          } else if (err.name === 'NotFoundError') {
+            errorMsg = 'No camera found on this device.';
+          } else if (err.name === 'NotReadableError') {
+            errorMsg = 'Camera is already in use by another app.';
+          }
+          showResult('error', 'Camera Error', errorMsg);
+        }
+      }
+
+      function closeVideoScanner() {
+        scanningActive = false;
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop());
+        }
+        videoScanner.classList.remove('active');
+        video.style.display = 'block';
+        document.querySelector('.scanner-overlay').style.display = 'block';
+        document.querySelector('.scanner-instructions').innerHTML = 'Position QR code within the frame';
+      }
+
+      function scanFrame() {
+        if (!scanningActive) return;
+
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+          canvas.height = video.videoHeight;
+          canvas.width = video.videoWidth;
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+          const code = jsQR(imageData.data, imageData.width, imageData.height);
+          
+          if (code) {
+            processQRCode(code.data);
+            return;
+          }
+        }
+        
+        requestAnimationFrame(scanFrame);
+      }
+
+      function processQRCode(data) {
+        closeVideoScanner();
+        resetIdleTimer();
+
+        try {
+          const url = new URL(data);
+          const id = url.searchParams.get('id');
+          const token = url.searchParams.get('t');
+          
+          if (!id || !token) {
+            showResult('error', 'Invalid QR Code', 'This QR code is not valid for check-in');
+            return;
+          }
+
+          processCheckIn(id, token);
+        } catch (err) {
+          showResult('error', 'Invalid QR Code', 'Could not read QR code data');
+        }
+      }
+
+      // Manual Search
+      searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') searchBtn.click();
+      });
+
+      searchBtn.addEventListener('click', performSearch);
+
+      async function performSearch() {
+        const query = searchInput.value.trim();
+        if (!query) return;
+
+        resetIdleTimer();
+        searchResults.innerHTML = '<div class="no-results"><div class="spinner"></div></div>';
+        searchResults.classList.add('active');
+        householdCard.classList.remove('active');
+
+        try {
+          const url = `${API_URL}?action=search&query=${encodeURIComponent(query)}`;
+          const response = await fetch(url);
+          const data = await response.json();
+
+          if (data.success && data.results && data.results.length > 0) {
+            displaySearchResults(data.results);
+          } else {
+            searchResults.innerHTML = '<div class="no-results">No households found matching "' + query + '"</div>';
+          }
+        } catch (err) {
+          searchResults.innerHTML = '<div class="no-results">Search failed. Please try again.</div>';
+        }
+      }
+
+      function displaySearchResults(results) {
+        searchResults.innerHTML = results.map(result => `
+          <div class="search-result-item" onclick="selectHousehold('${result.contactId}', '${result.token}')">
+            <div class="result-name">${result.name}</div>
+            <div class="result-details">${result.phone || ''} ${result.address ? '• ' + result.address : ''}</div>
+          </div>
+        `).join('');
+      }
+
+      async function selectHousehold(contactId, token) {
+        resetIdleTimer();
+        searchResults.classList.remove('active');
+        householdCard.innerHTML = '<div style="text-align: center; padding: 32px;"><div class="spinner"></div></div>';
+        householdCard.classList.add('active');
+
+        try {
+          const url = `${API_URL}?action=loadHousehold&id=${contactId}&token=${token}`;
+          const response = await fetch(url);
+          const data = await response.json();
+
+          if (data.success) {
+            selectedHousehold = { contactId, token, data: data };
+            displayHouseholdDetails(data);
+          } else {
+            householdCard.innerHTML = '<div class="error-message">Failed to load household details</div>';
+          }
+        } catch (err) {
+          householdCard.innerHTML = '<div class="error-message">Connection error. Please try again.</div>';
+        }
+      }
+
+      function displayHouseholdDetails(data) {
+        let statusBadge = '';
+        let statusClass = '';
+        let message = '';
+        let canCheckIn = false;
+        let canServe = false;
+
+        // Determine eligibility
+        if (data.status === 'Pending') {
+          statusBadge = '<span class="status-badge status-denied">Not Approved</span>';
+          message = '<div class="error-message">This application has not been approved yet.</div>';
+        } else if (data.status === 'Denied') {
+          statusBadge = '<span class="status-badge status-denied">Denied</span>';
+          message = '<div class="error-message">This application has been denied.</div>';
+        } else if (data.expired) {
+          statusBadge = '<span class="status-badge status-denied">Expired</span>';
+          message = '<div class="error-message">This application expired on ' + data.expirationDate + '</div>';
+        } else if (data.alreadyCheckedIn && data.alreadyServed) {
+          statusBadge = '<span class="status-badge status-warning">Already Served</span>';
+          message = '<div class="warning-message">Already checked in and served today.</div>';
+        } else if (data.alreadyCheckedIn) {
+          statusBadge = '<span class="status-badge status-warning">Checked In</span>';
+          message = '<div class="warning-message">Already checked in today. Ready to be served.</div>';
+          canServe = true;
+        } else if (data.alreadyServed) {
+          statusBadge = '<span class="status-badge status-warning">Already Served</span>';
+          message = '<div class="warning-message">Already served this month.</div>';
+        } else {
+          statusBadge = '<span class="status-badge status-eligible">✓ Eligible</span>';
+          canCheckIn = true;
+          canServe = true;
+        }
+
+        householdCard.innerHTML = `
+          <div class="household-header">
+            <div class="household-name">${data.householdName}</div>
+            <div class="household-address">${data.address || ''}</div>
+          </div>
+          
+          ${message}
+          
+          <div class="household-info">
+            <div class="info-row">
+              <span class="info-label">Status</span>
+              ${statusBadge}
+            </div>
+            <div class="info-row">
+              <span class="info-label">Household Size</span>
+              <span class="info-value">${data.householdSize || 0}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Phone</span>
+              <span class="info-value">${data.phone || 'N/A'}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Last Check-In</span>
+              <span class="info-value">${data.lastCheckIn || 'Never'}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Expires</span>
+              <span class="info-value">${data.expirationDate || 'N/A'}</span>
+            </div>
+          </div>
+          
+          <div class="action-buttons">
+            <button class="btn-action btn-checkin" id="manualCheckInBtn" ${canCheckIn ? '' : 'disabled'}>
+              Check In
+            </button>
+            <button class="btn-action btn-serve" id="manualServeBtn" ${canServe ? '' : 'disabled'}>
+              Mark Served
+            </button>
+          </div>
+        `;
+
+        // Attach event listeners
+        if (canCheckIn) {
+          document.getElementById('manualCheckInBtn').addEventListener('click', () => {
+            processCheckIn(selectedHousehold.contactId, selectedHousehold.token, 'checkin');
+          });
+        }
+        if (canServe) {
+          document.getElementById('manualServeBtn').addEventListener('click', () => {
+            processCheckIn(selectedHousehold.contactId, selectedHousehold.token, 'serve');
+          });
+        }
+      }
+
+      // API Call (works for both scanner and manual)
+      async function processCheckIn(contactId, token, actionOverride = null) {
+        const action = actionOverride || currentMode;
+        
+        // If in manual mode, show loading in household card
+        if (currentInterfaceMode === 'manual') {
+          householdCard.innerHTML = '<div style="text-align: center; padding: 32px;"><div class="spinner"></div><div style="margin-top: 16px;">Processing...</div></div>';
+        } else {
+          showResult('loading', 'Processing...', 'Please wait');
+        }
+
+        const url = `${API_URL}?id=${contactId}&t=${token}&action=${action}`;
+
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+
+          if (data.success) {
+            // Increment counters
+            if (action === 'checkin') {
+              checkInCount++;
+              checkInCountEl.textContent = checkInCount;
+              checkInCountEl2.textContent = checkInCount;
+            } else {
+              serveCount++;
+              servedCountEl.textContent = serveCount;
+              servedCountEl2.textContent = serveCount;
+            }
+            
+            addToHistory(data.householdName, action);
+            saveSessionData();
+            
+            const actionText = action === 'checkin' ? 'Checked In' : 'Served';
+            
+            if (currentInterfaceMode === 'manual') {
+              householdCard.innerHTML = `
+                <div style="text-align: center; padding: 32px; background: #d4edda; border-radius: 12px;">
+                  <div style="font-size: 48px; margin-bottom: 16px;">✓</div>
+                  <div style="font-size: 20px; font-weight: 600; color: #155724; margin-bottom: 8px;">${data.householdName}</div>
+                  <div style="color: #155724;">${actionText} successfully</div>
+                </div>
+              `;
+              setTimeout(() => {
+                householdCard.classList.remove('active');
+                searchInput.value = '';
+                searchInput.focus();
+              }, 3000);
+            } else {
+              showResult('success', '✓ ' + data.householdName, actionText + ' successfully');
+            }
+          } else {
+            const errorMsg = data.message || 'Operation failed';
+            
+            if (currentInterfaceMode === 'manual') {
+              householdCard.innerHTML = `
+                <div class="error-message">
+                  <strong>${data.householdName || 'Error'}</strong><br>${errorMsg}
+                </div>
+                <button class="btn btn-primary" style="margin-top: 16px;" onclick="householdCard.classList.remove('active')">Close</button>
+              `;
+            } else {
+              if (data.message && data.message.toLowerCase().includes('already served')) {
+                showResult('info', data.householdName || 'Household', 'Already served today');
+              } else {
+                showResult('error', 'Error', errorMsg);
+              }
+            }
+          }
+        } catch (err) {
+          if (currentInterfaceMode === 'manual') {
+            householdCard.innerHTML = `
+              <div class="error-message">Connection error. Please try again.</div>
+              <button class="btn btn-primary" style="margin-top: 16px;" onclick="householdCard.classList.remove('active')">Close</button>
+            `;
+          } else {
+            showResult('error', 'Connection Error', 'Could not connect to server');
+          }
+        }
+      }
+
+      // Result Display (for scanner mode)
+      function showResult(type, text, subtext) {
+        resultDisplay.className = 'result-display ' + type;
+        
+        if (type === 'loading') {
+          resultDisplay.innerHTML = '<div><div class="spinner"></div><div class="result-text" style="margin-top: 16px;">' + text + '</div></div>';
+        } else {
+          let icon = '✓';
+          if (type === 'error') icon = '✕';
+          if (type === 'info') icon = 'ℹ️';
+          
+          resultDisplay.innerHTML = '<div><div class="result-icon">' + icon + '</div><div class="result-text">' + text + '</div><div class="result-subtext">' + subtext + '</div></div>';
+        }
+
+        if (type !== 'loading') {
+          setTimeout(() => {
+            resultDisplay.className = 'result-display';
+            resultDisplay.innerHTML = '<div><div class="result-text">Ready to scan</div><div class="result-subtext">Tap the button to scan next code</div></div>';
+          }, 3000);
+        }
+      }
+
+      // History
+      function addToHistory(name, action) {
+        const actionText = action === 'checkin' ? 'Checked In' : 'Served';
+        const timeText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        scanHistory.unshift({ name: name, action: actionText, time: timeText });
+        if (scanHistory.length > 10) scanHistory.pop();
+        
+        updateHistoryDisplay();
+      }
+
+      function updateHistoryDisplay() {
+        if (scanHistory.length === 0) {
+          historyList.innerHTML = '<div style="color: #6c757d; text-align: center; padding: 20px; font-size: 14px;">No scans yet</div>';
+          return;
+        }
+
+        historyList.innerHTML = scanHistory.map(item => 
+          '<div class="history-item"><div><div class="history-name">' + item.name + '</div><div class="history-action">' + item.action + '</div></div><div class="history-time">' + item.time + '</div></div>'
+        ).join('');
+      }
+
+      // Session Persistence
+      function saveSessionData() {
+        sessionStorage.setItem('scannerSession', JSON.stringify({
+          checkInCount: checkInCount,
+          serveCount: serveCount,
+          scanHistory: scanHistory,
+          currentMode: currentMode
+        }));
+      }
+
+      function loadSessionData() {
+        const saved = sessionStorage.getItem('scannerSession');
+        if (saved) {
+          const data = JSON.parse(saved);
+          checkInCount = data.checkInCount || 0;
+          serveCount = data.serveCount || 0;
+          scanHistory = data.scanHistory || [];
+          currentMode = data.currentMode || 'checkin';
+          
+          checkInCountEl.textContent = checkInCount;
+          servedCountEl.textContent = serveCount;
+          checkInCountEl2.textContent = checkInCount;
+          servedCountEl2.textContent = serveCount;
+          setMode(currentMode);
+          updateHistoryDisplay();
+        }
+      }
+
+      // Logout
+      logoutBtn.addEventListener('click', logout);
+
+      function logout() {
+        authenticated = false;
+        clearTimeout(idleTimer);
+        clearTimeout(warningTimer);
+        clearInterval(sessionTimeInterval);
+        closeVideoScanner();
+        
+        scannerScreen.classList.remove('active');
+        pinScreen.style.display = 'flex';
+        pinInput.value = '';
+        pinError.style.display = 'none';
+        timeoutWarning.classList.remove('active');
+        
+        // Reset to scanner mode
+        setInterfaceMode('scanner');
+      }
+
+      // Activity Tracking
+      document.addEventListener('click', resetIdleTimer);
+      document.addEventListener('touchstart', resetIdleTimer);
+    </script>
+  </body>
+</html>

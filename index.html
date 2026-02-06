@@ -1,0 +1,388 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your Check-In Card</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Poppins', sans-serif;
+        background: #f8f9fa;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
+
+      .instructions {
+        max-width: 600px;
+        width: 100%;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .instructions h1 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #151556;
+        margin-bottom: 12px;
+      }
+
+      .instructions p {
+        font-size: 15px;
+        color: #6c757d;
+        line-height: 1.6;
+        margin-bottom: 8px;
+      }
+
+      .download-btn {
+        display: inline-block;
+        background: #00BDFF;
+        color: white;
+        padding: 14px 32px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 16px;
+        text-decoration: none;
+        margin-top: 16px;
+        cursor: pointer;
+        border: none;
+        font-family: 'Poppins', sans-serif;
+        transition: background 0.2s;
+      }
+
+      .download-btn:hover {
+        background: #0099cc;
+      }
+      
+      .download-btn:disabled {
+        opacity: 0.6;
+        cursor: wait;
+      }
+
+      /* Digital Card */
+      .card-container {
+        max-width: 600px;
+        width: 100%;
+      }
+
+      #digital-card {
+        width: 100%;
+        min-height: 400px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        display: flex;
+        flex-direction: column;
+        padding: 32px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card-header {
+        text-align: center;
+        margin-bottom: 24px;
+      }
+
+      .org-name {
+        font-size: 20px;
+        font-weight: 700;
+        color: #151556;
+        margin-bottom: 4px;
+      }
+
+      .household-name {
+        font-size: 32px;
+        font-weight: 700;
+        color: #151556;
+        line-height: 1.2;
+        word-wrap: break-word;
+      }
+
+      .card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .qr-container {
+        background: white;
+        padding: 16px;
+        border-radius: 12px;
+        border: 3px solid #151556;
+        margin-bottom: 20px;
+      }
+
+      .qr-code {
+        width: 200px;
+        height: 200px;
+        display: block;
+      }
+
+      .scan-instruction {
+        font-size: 16px;
+        font-weight: 600;
+        color: #151556;
+        text-align: center;
+        max-width: 100%;
+        word-wrap: break-word;
+      }
+
+      .card-footer {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid #e9ecef;
+        margin-top: auto;
+      }
+
+      .powered-by {
+        font-size: 12px;
+        color: #6c757d;
+      }
+
+      .powered-by a {
+        color: #00BDFF;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      /* Mobile adjustments */
+      @media (max-width: 600px) {
+        body {
+          padding: 16px;
+        }
+
+        #digital-card {
+          padding: 24px;
+        }
+
+        .household-name {
+          font-size: 28px;
+        }
+
+        .org-name {
+          font-size: 18px;
+        }
+
+        .qr-code {
+          width: 180px;
+          height: 180px;
+        }
+      }
+
+      @media (max-width: 400px) {
+        #digital-card {
+          padding: 20px;
+        }
+
+        .household-name {
+          font-size: 24px;
+        }
+
+        .org-name {
+          font-size: 16px;
+        }
+
+        .qr-code {
+          width: 160px;
+          height: 160px;
+        }
+
+        .scan-instruction {
+          font-size: 14px;
+        }
+      }
+
+      /* Print styles */
+      @media print {
+        body {
+          background: white;
+          padding: 0;
+        }
+
+        .instructions {
+          display: none;
+        }
+
+        #digital-card {
+          box-shadow: none;
+          page-break-inside: avoid;
+          width: 6in;
+          min-height: 4in;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="instructions">
+      <h1>Your Food Pantry Check-In Card</h1>
+      <p><strong>Save this card to your phone.</strong> You'll need it each time you visit the food pantry.</p>
+      <p>Take a screenshot or download the image below. Show it at check-in or we'll scan it from your phone.</p>
+      <button class="download-btn" onclick="downloadCard()">Download Card to Phone</button>
+    </div>
+
+    <div class="card-container">
+      <div id="digital-card">
+        <div class="card-header">
+          <div class="org-name" id="orgName">Little Zion Community Outreach</div>
+          <div class="household-name" id="householdName">Loading...</div>
+        </div>
+
+        <div class="card-body">
+          <div class="qr-container">
+            <img id="qrCode" class="qr-code" src="" alt="Your QR Code" />
+          </div>
+          <div class="scan-instruction">Scan this at check-in</div>
+        </div>
+
+        <div class="card-footer">
+          <div class="powered-by">
+            Powered by <a href="https://geauxsystems.com" target="_blank">Geaux Systems</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Get URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const contactId = urlParams.get('id') || '';
+      const token = urlParams.get('t') || '';
+      const name = urlParams.get('name') || 'Household';
+      const orgLocation = urlParams.get('location') || 'Little Zion Community Outreach';
+
+      // Your check-in app URL
+      const CHECKIN_URL = "https://" + "app.geauxsystems.com/v2/preview/9jRtZmhLU9KLejNfo6rX";
+
+      // Set household name and location
+      document.getElementById('householdName').textContent = decodeURIComponent(name);
+      document.getElementById('orgName').textContent = decodeURIComponent(orgLocation);
+
+      // Generate QR code URL
+      if (contactId && token) {
+        const qrData = CHECKIN_URL + "?id=" + contactId + "&t=" + token;
+        const qrImageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=" + encodeURIComponent(qrData);
+        document.getElementById('qrCode').src = qrImageUrl;
+      } else {
+        // Error state - no valid parameters
+        document.getElementById('householdName').textContent = 'Invalid Card';
+        document.getElementById('householdName').style.color = '#FF3B3B';
+        document.querySelector('.scan-instruction').textContent = 'Please contact staff for a valid check-in card link';
+        document.querySelector('.scan-instruction').style.color = '#721c24';
+        document.querySelector('.qr-container').style.borderColor = '#FF3B3B';
+        document.querySelector('.qr-container').style.background = '#ffe5e5';
+        
+        // Hide download button for invalid cards
+        document.querySelector('.download-btn').style.display = 'none';
+      }
+
+      // Download card function
+      function downloadCard() {
+        // Show loading state
+        const btn = document.querySelector('.download-btn');
+        const originalText = btn.textContent;
+        btn.textContent = 'Preparing...';
+        btn.disabled = true;
+        
+        // Try native share API first (works on mobile)
+        if (navigator.share && /mobile/i.test(navigator.userAgent)) {
+          // Get the QR code as blob
+          fetch(document.getElementById('qrCode').src)
+            .then(res => res.blob())
+            .then(blob => {
+              const file = new File([blob], name.replace(/[^a-z0-9]/gi, '_') + '_checkin_card.png', { type: 'image/png' });
+              navigator.share({
+                title: 'Food Pantry Check-In Card',
+                text: 'Save this card to your phone for check-in.',
+                files: [file]
+              }).finally(() => {
+                btn.textContent = originalText;
+                btn.disabled = false;
+              });
+            })
+            .catch(err => {
+              console.log('Share failed, trying download:', err);
+              fallbackDownload(btn, originalText);
+            });
+        } else {
+          fallbackDownload(btn, originalText);
+        }
+      }
+
+      function fallbackDownload(btn, originalText) {
+        // Ensure fonts are loaded before capturing
+        document.fonts.ready.then(() => {
+          // Small delay to ensure rendering is complete
+          setTimeout(() => {
+            // Use html2canvas to capture the card
+            if (typeof html2canvas !== 'undefined') {
+              html2canvas(document.getElementById('digital-card'), {
+                scale: 2,
+                backgroundColor: '#ffffff',
+                useCORS: true,
+                allowTaint: true,
+                logging: false,
+                onclone: (clonedDoc) => {
+                  // Ensure the cloned document also has fonts loaded
+                  const clonedCard = clonedDoc.getElementById('digital-card');
+                  clonedCard.style.fontFamily = "'Poppins', sans-serif";
+                }
+              }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = name.replace(/[^a-z0-9]/gi, '_') + '_checkin_card.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                // Reset button
+                if (btn) {
+                  btn.textContent = originalText;
+                  btn.disabled = false;
+                }
+              }).catch(err => {
+                console.error('Canvas generation failed:', err);
+                screenshotInstructions();
+                if (btn) {
+                  btn.textContent = originalText;
+                  btn.disabled = false;
+                }
+              });
+            } else {
+              screenshotInstructions();
+              if (btn) {
+                btn.textContent = originalText;
+                btn.disabled = false;
+              }
+            }
+          }, 300); // 300ms delay for font rendering
+        });
+      }
+      
+      function screenshotInstructions() {
+        alert('Please take a screenshot of this card to save it to your phone.\n\niPhone: Press Side + Volume Up\nAndroid: Press Power + Volume Down');
+      }
+
+      // Load html2canvas for download functionality
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      document.head.appendChild(script);
+    </script>
+  </body>
+</html>
