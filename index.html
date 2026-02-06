@@ -1,0 +1,283 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Little Zion Staff Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #151556 0%, #1a1d6e 50%, #151556 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 48px;
+      padding-top: 40px;
+    }
+
+    .header h1 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .header p {
+      font-size: 18px;
+      opacity: 0.9;
+      font-weight: 400;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #00BDFF 0%, #7DCE3B 100%);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+      transform-origin: left;
+    }
+
+    .card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,189,255,0.2);
+    }
+
+    .card-icon {
+      width: 56px;
+      height: 56px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #00BDFF 0%, #00a3e0 100%);
+      box-shadow: 0 4px 12px rgba(0,189,255,0.3);
+    }
+
+    .card-icon svg {
+      width: 28px;
+      height: 28px;
+      fill: white;
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #151556;
+      margin-bottom: 8px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .card-description {
+      font-size: 15px;
+      color: #6c757d;
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    .section-title {
+      color: white;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      margin-top: 40px;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: #7DCE3B;
+      border-radius: 2px;
+    }
+
+    .footer {
+      text-align: center;
+      color: white;
+      padding: 40px 20px;
+      opacity: 0.9;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .footer a {
+      color: #00BDFF;
+      text-decoration: none;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+
+    .footer a:hover {
+      opacity: 0.8;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 28px;
+      }
+
+      .header p {
+        font-size: 16px;
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 24px;
+      }
+
+      .card-icon {
+        width: 48px;
+        height: 48px;
+      }
+
+      .card-icon svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .card-title {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Little Zion Food Pantry</h1>
+      <p>Staff Operations Hub</p>
+    </div>
+
+    <div class="section-title">Daily Operations</div>
+    <div class="cards-grid">
+      <a href="approval.html" class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+          </svg>
+        </div>
+        <div class="card-title">Approval Dashboard</div>
+        <div class="card-description">Review and approve pending applications. Generate digital cards and QR codes.</div>
+      </a>
+
+      <a href="scanner.html" class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 5v4h2V5h4V3H5c-1.1 0-2 .9-2 2zm2 10H3v4c0 1.1.9 2 2 2h4v-2H5v-4zm14 4h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zm0-16h-4v2h4v4h2V5c0-1.1-.9-2-2-2z"/>
+          </svg>
+        </div>
+        <div class="card-title">Scanner Portal</div>
+        <div class="card-description">Check in households and mark as served. Scan QR codes or search manually.</div>
+      </a>
+
+      <a href="https://docs.google.com/spreadsheets/d/1573Lc2r18S36QQXsrh-iUlmjNd4aIFkbcNabEtHqkb8/edit" target="_blank" class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+          </svg>
+        </div>
+        <div class="card-title">LDAF Compliance</div>
+        <div class="card-description">Auto-populated monthly distribution reports for state compliance and audits.</div>
+      </a>
+    </div>
+
+    <div class="section-title">Administration</div>
+    <div class="cards-grid">
+      <a href="https://docs.google.com/spreadsheets/d/YOUR_LOG_SHEET_ID/edit" target="_blank" class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+          </svg>
+        </div>
+        <div class="card-title">Distribution Log</div>
+        <div class="card-description">Real-time operational tracking of all check-in and serve activities.</div>
+      </a>
+
+      <a href="regenerate.html" class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/>
+          </svg>
+        </div>
+        <div class="card-title">Regenerate Lost Card</div>
+        <div class="card-description">Issue new QR code for lost cards. Old QR becomes invalid instantly.</div>
+      </a>
+    </div>
+
+    <div class="footer">
+      Powered by <a href="https://geauxsystems.com" target="_blank">Geaux Systems</a>
+    </div>
+  </div>
+
+  <script>
+    // Keyboard shortcuts for power users
+    document.addEventListener('keydown', function(e) {
+      // Alt+1 = Approval Dashboard
+      if (e.altKey && e.key === '1') {
+        window.location.href = 'approval.html';
+      }
+      // Alt+2 = Scanner Portal
+      if (e.altKey && e.key === '2') {
+        window.location.href = 'scanner.html';
+      }
+      // Alt+3 = LDAF Compliance
+      if (e.altKey && e.key === '3') {
+        window.open('https://docs.google.com/spreadsheets/d/1573Lc2r18S36QQXsrh-iUlmjNd4aIFkbcNabEtHqkb8/edit', '_blank');
+      }
+    });
+  </script>
+</body>
+</html>
