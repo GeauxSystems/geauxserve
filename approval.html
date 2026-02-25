@@ -809,12 +809,8 @@
         applicationsContainer.innerHTML = '<div class="spinner"></div><div class="loading-text">Loading applications...</div>';
 
         try {
-          const response = await fetch(API_URL + "?action=approveApplication&contactId=" + contactId);
-console.log("Response status:", response.status);
-console.log("Response headers:", [...response.headers.entries()]);
-const responseText = await response.text();
-console.log("Response body:", responseText);
-const data = JSON.parse(responseText);
+          const response = await fetch(API_URL + "?action=getPendingApplications");
+          const data = await response.json();
 
           if (data.success) {
             applications = data.applications || [];
@@ -830,6 +826,7 @@ const data = JSON.parse(responseText);
             applicationsContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div>Failed to load applications</div></div>';
           }
         } catch (err) {
+          console.error("Load applications error:", err);
           applicationsContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div>Connection error. Please try again.</div></div>';
         }
       }
@@ -943,8 +940,6 @@ const data = JSON.parse(responseText);
               card.style.opacity = '0';
               card.style.transform = 'scale(0.9)';
               setTimeout(() => {
-                // Reload from backend to get accurate counts
-                // Don't increment locally - backend is source of truth
                 loadApplications();
               }, 300);
             }, 2000);
@@ -955,6 +950,7 @@ const data = JSON.parse(responseText);
             alert('Error: ' + (data.message || 'Failed to approve application'));
           }
         } catch (err) {
+          console.error("Approval error:", err);
           approveBtn.textContent = '✓ Approve';
           approveBtn.disabled = false;
           denyBtn.disabled = false;
@@ -982,35 +978,23 @@ const data = JSON.parse(responseText);
       }
 
       denyForm.addEventListener('submit', async (e) => {
-        console.log('Deny form submitted');
         e.preventDefault();
         resetIdleTimer();
         
         const reason = denyReason.value;
         const notes = denyNotes.value.trim();
-        
-        console.log('Reason:', reason);
-        console.log('Notes:', notes);
-        console.log('currentDenyingId:', currentDenyingId);
 
         if (!reason) {
-          console.log('No reason selected');
           alert('Please select a reason for denial');
           return;
         }
 
-        // Capture the contact ID BEFORE closing modal (which resets currentDenyingId to null)
         const contactId = currentDenyingId;
-
-        console.log('Closing modal...');
         closeDenyModal();
 
-        console.log('Looking for card with data-id:', contactId);
         const card = document.querySelector(`[data-id="${contactId}"]`);
-        console.log('Card found:', card);
         
         if (!card) {
-          console.error('ERROR: Could not find card element!');
           alert('Error: Could not find application card. Please refresh and try again.');
           return;
         }
@@ -1022,27 +1006,20 @@ const data = JSON.parse(responseText);
         denyBtn.disabled = true;
         denyBtn.textContent = 'Processing...';
 
-        console.log('Making API call...');
         try {
           const url = API_URL + "?action=denyApplication&contactId=" + contactId + "&reason=" + encodeURIComponent(reason) + "&notes=" + encodeURIComponent(notes);
-          console.log('API URL:', url);
           const response = await fetch(url);
           const data = await response.json();
-          console.log('API Response:', data);
 
           if (data.success) {
-            // Show denied state
             card.style.background = '#f8d7da';
             card.innerHTML = '<div style="padding: 20px; text-align: center;"><div style="font-size: 32px; margin-bottom: 12px;">❌</div><div style="font-size: 18px; font-weight: 600; color: #721c24;">Denied</div><div style="margin-top: 8px; color: #721c24;">Reason: ' + reason + '</div></div>';
             
-            // Remove card after 2 seconds
             setTimeout(() => {
               card.style.transition = 'all 0.3s';
               card.style.opacity = '0';
               card.style.transform = 'scale(0.9)';
               setTimeout(() => {
-                // Reload from backend to get accurate counts
-                // Don't increment locally - backend is source of truth
                 loadApplications();
               }, 300);
             }, 2000);
@@ -1053,6 +1030,7 @@ const data = JSON.parse(responseText);
             alert('Error: ' + (data.message || 'Failed to deny application'));
           }
         } catch (err) {
+          console.error("Denial error:", err);
           denyBtn.textContent = '✕ Deny';
           approveBtn.disabled = false;
           denyBtn.disabled = false;
