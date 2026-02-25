@@ -809,8 +809,12 @@
         applicationsContainer.innerHTML = '<div class="spinner"></div><div class="loading-text">Loading applications...</div>';
 
         try {
-          const response = await fetch(API_URL + "?action=getPendingApplications");
-          const data = await response.json();
+          const response = await fetch(API_URL + "?action=approveApplication&contactId=" + contactId);
+console.log("Response status:", response.status);
+console.log("Response headers:", [...response.headers.entries()]);
+const responseText = await response.text();
+console.log("Response body:", responseText);
+const data = JSON.parse(responseText);
 
           if (data.success) {
             applications = data.applications || [];
