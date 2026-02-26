@@ -128,12 +128,22 @@
         border-radius: 12px;
         border: 3px solid #151556;
         margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .qr-code {
         width: 200px;
         height: 200px;
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .qr-code img {
+        max-width: 100%;
+        max-height: 100%;
       }
 
       .scan-instruction {
@@ -235,7 +245,7 @@
     <div class="instructions">
       <h1>Your Food Pantry Check-In Card</h1>
       <p><strong>Save this card to your phone.</strong> You'll need it each time you visit the food pantry.</p>
-      <p>Click the button below to download your card, or take a screenshot.</p>
+      <p>Take a screenshot or download the image below. Show it at check-in or we'll scan it from your phone.</p>
       <button class="download-btn" id="downloadBtn" onclick="downloadCard()">Download Card to Phone</button>
     </div>
 
@@ -248,7 +258,7 @@
 
         <div class="card-body">
           <div class="qr-container">
-            <img id="qrCode" class="qr-code" src="" alt="Your QR Code" />
+            <div id="qrCode" class="qr-code" aria-label="Your QR Code"></div>
           </div>
           <div class="scan-instruction">Scan this at check-in</div>
         </div>
@@ -261,7 +271,10 @@
       </div>
     </div>
 
-    <!-- Load html2canvas first -->
+    <!-- Load QRCode.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    
+    <!-- Load html2canvas for download functionality -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <script>
@@ -272,40 +285,36 @@
       const name = urlParams.get('name') || 'Household';
       const orgLocation = urlParams.get('location') || 'Little Zion Community Outreach';
 
-      // Debug logging
-      console.log('Card Parameters:');
-      console.log('Contact ID:', contactId);
-      console.log('Token:', token);
-      console.log('Name:', name);
-      console.log('Location:', orgLocation);
-
       // Your check-in app URL
       const CHECKIN_URL = "https://app.geauxsystems.com/v2/preview/9jRtZmhLU9KLejNfo6rX";
 
-      // Set household name and location
-      document.getElementById('householdName').textContent = decodeURIComponent(name);
-      document.getElementById('orgName').textContent = decodeURIComponent(orgLocation);
+      // Set household name and location (URLSearchParams already decodes)
+      document.getElementById('householdName').textContent = name;
+      document.getElementById('orgName').textContent = orgLocation;
 
-      // Generate QR code URL
+      // Generate QR code locally
       if (contactId && token) {
-        const qrData = CHECKIN_URL + "?id=" + contactId + "&t=" + token;
-        const qrImageUrl = "https://chart.googleapis.com/chart?cht=qr&chs=400x400&chl=" + encodeURIComponent(qrData);
-        
+        const qrData = `${CHECKIN_URL}?id=${encodeURIComponent(contactId)}&t=${encodeURIComponent(token)}`;
+
         console.log('QR Data:', qrData);
-        console.log('QR Image URL:', qrImageUrl);
-        
-        const qrImg = document.getElementById('qrCode');
-        qrImg.src = qrImageUrl;
-        
-        // Add error handler
-        qrImg.onerror = function() {
-          console.error('QR code failed to load');
-          document.querySelector('.qr-container').innerHTML = '<div style="width:200px;height:200px;display:flex;align-items:center;justify-content:center;color:#FF3B3B;text-align:center;font-size:14px;">QR Code failed to load. Please contact support.</div>';
-        };
-        
-        qrImg.onload = function() {
-          console.log('QR code loaded successfully');
-        };
+
+        try {
+          const qrEl = document.getElementById('qrCode');
+          qrEl.innerHTML = ""; // clear any previous content
+
+          new QRCode(qrEl, {
+            text: qrData,
+            width: 200,
+            height: 200,
+            correctLevel: QRCode.CorrectLevel.M
+          });
+
+          console.log('QR rendered successfully');
+        } catch (e) {
+          console.error('QR render failed', e);
+          document.querySelector('.qr-container').innerHTML =
+            '<div style="width:200px;height:200px;display:flex;align-items:center;justify-content:center;color:#FF3B3B;text-align:center;font-size:14px;">QR Code failed to render. Please contact support.</div>';
+        }
       } else {
         // Error state - no valid parameters
         console.error('Missing parameters - contactId:', contactId, 'token:', token);
@@ -331,15 +340,13 @@
           // Wait for fonts to load
           await document.fonts.ready;
           
-          // Small delay to ensure QR code is fully loaded
+          // Small delay to ensure QR code is fully rendered
           await new Promise(resolve => setTimeout(resolve, 500));
 
           // Use html2canvas to capture the entire card
           const canvas = await html2canvas(document.getElementById('digital-card'), {
             scale: 3, // Higher quality
             backgroundColor: '#ffffff',
-            useCORS: true,
-            allowTaint: false,
             logging: false,
             width: document.getElementById('digital-card').offsetWidth,
             height: document.getElementById('digital-card').offsetHeight,
