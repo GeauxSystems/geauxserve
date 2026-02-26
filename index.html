@@ -236,6 +236,16 @@
 
     <div class="section-title">Administration</div>
     <div class="cards-grid">
+      <a href="dashboard.html" class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+          </svg>
+        </div>
+        <div class="card-title">Live Dashboard</div>
+        <div class="card-description">Real-time distribution metrics, pace tracking, and anomaly detection during service.</div>
+      </a>
+
       <a href="https://docs.google.com/spreadsheets/d/1573Lc2r18S36QQXsrh-iUlmjNd4aIFkbcNabEtHqkb8/edit" target="_blank" class="card">
         <div class="card-icon">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -276,6 +286,10 @@
       // Alt+3 = LDAF Compliance
       if (e.altKey && e.key === '3') {
         window.open('https://docs.google.com/spreadsheets/d/1573Lc2r18S36QQXsrh-iUlmjNd4aIFkbcNabEtHqkb8/edit', '_blank');
+      }
+      // Alt+4 = Live Dashboard
+      if (e.altKey && e.key === '4') {
+        window.location.href = 'dashboard.html';
       }
     });
   </script>
