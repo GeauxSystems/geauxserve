@@ -34,6 +34,16 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       margin-bottom: 20px;
       text-align: center;
+      transition: background 0.3s;
+    }
+
+    .header.live {
+      background: #7DCE3B;
+    }
+
+    .header.live h1,
+    .header.live p {
+      color: white;
     }
 
     .status-badge {
@@ -186,10 +196,6 @@
 
     .alert-item:last-child {
       margin-bottom: 0;
-    }
-
-    .alert-icon {
-      font-size: 20px;
     }
 
     .alert-text {
@@ -388,20 +394,17 @@
       <!-- Stats Grid -->
       <div class="stats-grid">
         <div class="stat-card">
-          <div class="icon">⏱️</div>
           <div class="label">Current Pace</div>
           <div class="value" id="currentPace">--</div>
           <div class="sublabel" id="paceLabel">households/hour</div>
         </div>
 
         <div class="stat-card">
-          <div class="icon">🎯</div>
           <div class="label">Projected Finish</div>
           <div class="value" id="projectedFinish">--</div>
         </div>
 
         <div class="stat-card">
-          <div class="icon">📋</div>
           <div class="label">In Line</div>
           <div class="value" id="inLineCount">0</div>
           <div class="sublabel">Checked in, not served</div>
@@ -410,7 +413,7 @@
 
       <!-- Alerts -->
       <div class="alerts">
-        <h3>⚠️ Needs Attention</h3>
+        <h3>Needs Attention</h3>
         <div id="alertsContainer">
           <div class="no-alerts">✓ No issues detected</div>
         </div>
@@ -426,14 +429,12 @@
 
       <!-- Export Section -->
       <div class="export-section">
-        <h3>📥 Export Reports</h3>
+        <h3>Export Reports</h3>
         <div class="export-buttons">
           <a href="#" class="export-btn" id="exportLDAF">
-            <span>📄</span>
             <span>Download LDAF Report</span>
           </a>
           <a href="#" class="export-btn secondary" id="exportActivity">
-            <span>📊</span>
             <span>Download Activity Log</span>
           </a>
         </div>
@@ -488,14 +489,17 @@
       const isLive = data.isLive || false;
       const statusBadge = document.getElementById('statusBadge');
       const statusText = document.getElementById('statusText');
+      const header = document.querySelector('.header');
       
       if (isLive) {
         statusBadge.classList.add('live');
         statusText.textContent = 'LIVE';
+        header.classList.add('live');
       } else {
         statusBadge.classList.remove('live');
         statusBadge.classList.add('complete');
         statusText.textContent = 'COMPLETE';
+        header.classList.remove('live');
       }
 
       document.getElementById('distributionTitle').textContent = data.title || 'Distribution Dashboard';
@@ -528,7 +532,6 @@
 
       container.innerHTML = alerts.map(alert => `
         <div class="alert-item">
-          <div class="alert-icon">⚠️</div>
           <div class="alert-text">${alert}</div>
         </div>
       `).join('');
