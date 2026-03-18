@@ -102,70 +102,84 @@
         border: none;
         border-radius: 10px;
         cursor: pointer;
+        transition: all 0.3s ease;
         font-family: 'Poppins', sans-serif;
-        transition: all 0.2s;
       }
 
       .btn-primary {
-        background: #00BDFF;
+        background: #151556;
         color: white;
       }
 
-      .btn-primary:hover {
-        background: #0099cc;
+      .btn-primary:hover:not(:disabled) {
+        background: #0d0d3a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(21, 21, 86, 0.3);
       }
 
-      .btn-primary:disabled {
+      .btn:disabled {
         opacity: 0.5;
         cursor: not-allowed;
       }
 
-      /* Scanner Screen */
-      .scanner-screen {
-        display: none;
+      /* Main Content */
+      .main-content {
         flex: 1;
-        flex-direction: column;
-      }
-
-      .scanner-screen.active {
-        display: flex;
-      }
-
-      /* Timeout Warning */
-      .timeout-warning {
-        background: #FFC107;
-        color: #000;
-        padding: 12px 20px;
-        text-align: center;
-        font-weight: 600;
         display: none;
+        flex-direction: column;
+        padding: 20px;
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
       }
 
-      .timeout-warning.active {
-        display: block;
+      /* Stats */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
       }
 
-      /* Mode Toggle */
-      .mode-toggle {
+      .stat-card {
         background: white;
-        padding: 16px 20px;
-        border-bottom: 1px solid #e9ecef;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        text-align: center;
+      }
+
+      .stat-label {
+        font-size: 13px;
+        color: #6c757d;
+        margin-bottom: 8px;
+      }
+
+      .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #151556;
+      }
+
+      /* Mode Switcher */
+      .mode-switcher {
         display: flex;
         gap: 12px;
-        justify-content: center;
-        flex-wrap: wrap;
+        margin-bottom: 24px;
+        background: white;
+        padding: 12px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       }
 
       .mode-btn {
-        padding: 12px 24px;
-        border: 2px solid #e9ecef;
-        border-radius: 10px;
-        background: white;
-        color: #6c757d;
+        flex: 1;
+        padding: 12px;
+        background: #f8f9fa;
+        border: 2px solid transparent;
+        border-radius: 8px;
         font-weight: 600;
         cursor: pointer;
-        font-family: 'Poppins', sans-serif;
-        font-size: 14px;
         transition: all 0.2s;
       }
 
@@ -175,79 +189,59 @@
         border-color: #151556;
       }
 
-      /* Main Areas */
-      .scanner-main, .manual-main {
-        flex: 1;
-        padding: 24px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 24px;
-        overflow-y: auto;
+      /* Scanner Container */
+      .scanner-container {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        padding: 32px;
+        margin-bottom: 24px;
       }
 
-      .manual-main {
-        display: none;
-      }
-
-      .manual-main.active {
-        display: flex;
-      }
-
-      .scanner-main.active {
-        display: flex;
-      }
-
-      .scanner-main.hidden {
-        display: none;
-      }
-
-      /* Scanner Button */
-      .scan-button {
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        background: #00BDFF;
-        color: white;
-        font-size: 18px;
+      .scanner-title {
+        font-size: 20px;
         font-weight: 700;
-        border: none;
-        cursor: pointer;
-        box-shadow: 0 8px 30px rgba(0,189,255,0.3);
-        transition: all 0.3s;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
+        color: #151556;
+        margin-bottom: 8px;
+        text-align: center;
       }
 
-      .scan-button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 12px 40px rgba(0,189,255,0.4);
+      .scanner-subtitle {
+        font-size: 14px;
+        color: #6c757d;
+        margin-bottom: 24px;
+        text-align: center;
       }
 
-      .scan-button:active {
-        transform: scale(0.95);
-      }
-
-      .scan-icon {
-        font-size: 48px;
-      }
-
-      /* Manual Search Interface */
-      .search-box {
+      #reader {
         width: 100%;
         max-width: 500px;
+        margin: 0 auto;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      /* Manual Search */
+      .manual-search-container {
+        display: none;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        padding: 32px;
+        margin-bottom: 24px;
+      }
+
+      .search-box {
         position: relative;
+        margin-bottom: 24px;
       }
 
       .search-input {
         width: 100%;
-        padding: 16px 48px 16px 16px;
+        padding: 16px 20px;
         font-size: 16px;
         border: 2px solid #e9ecef;
-        border-radius: 10px;
+        border-radius: 12px;
         font-family: 'Poppins', sans-serif;
       }
 
@@ -256,48 +250,29 @@
         border-color: #00BDFF;
       }
 
-      .search-btn {
-        position: absolute;
-        right: 8px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: #00BDFF;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: 600;
+      .btn-search {
+        margin-top: 16px;
       }
 
       .search-results {
-        width: 100%;
-        max-width: 500px;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        max-height: 300px;
-        overflow-y: auto;
         display: none;
+        margin-top: 24px;
       }
 
-      .search-results.active {
-        display: block;
-      }
-
-      .search-result-item {
-        padding: 16px;
-        border-bottom: 1px solid #e9ecef;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-
-      .search-result-item:hover {
+      .result-item {
         background: #f8f9fa;
+        padding: 16px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
       }
 
-      .search-result-item:last-child {
-        border-bottom: none;
+      .result-item:hover {
+        background: white;
+        border-color: #00BDFF;
+        transform: translateX(4px);
       }
 
       .result-name {
@@ -307,63 +282,53 @@
       }
 
       .result-details {
-        font-size: 14px;
-        color: #6c757d;
-      }
-
-      .no-results {
-        padding: 32px;
-        text-align: center;
+        font-size: 13px;
         color: #6c757d;
       }
 
       /* Household Details Card */
-      .household-card {
-        width: 100%;
-        max-width: 500px;
-        background: white;
-        border-radius: 12px;
-        padding: 24px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      .household-details-card {
         display: none;
-      }
-
-      .household-card.active {
-        display: block;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        padding: 32px;
+        margin-bottom: 24px;
       }
 
       .household-header {
-        border-bottom: 2px solid #e9ecef;
-        padding-bottom: 16px;
-        margin-bottom: 16px;
+        text-align: center;
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #f1f3f5;
       }
 
       .household-name {
-        font-size: 20px;
+        font-size: 24px;
         font-weight: 700;
         color: #151556;
         margin-bottom: 8px;
       }
 
       .household-address {
-        color: #6c757d;
         font-size: 14px;
+        color: #6c757d;
       }
 
       .household-info {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        margin-bottom: 20px;
+        margin-bottom: 24px;
       }
 
       .info-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #f1f3f5;
       }
 
       .info-label {
+        font-weight: 600;
         color: #6c757d;
         font-size: 14px;
       }
@@ -374,8 +339,7 @@
       }
 
       .status-badge {
-        display: inline-block;
-        padding: 4px 12px;
+        padding: 6px 12px;
         border-radius: 20px;
         font-size: 13px;
         font-weight: 600;
@@ -386,73 +350,72 @@
         color: #155724;
       }
 
-      .status-warning {
+      .status-served {
         background: #fff3cd;
         color: #856404;
       }
 
-      .status-denied {
+      .status-expired {
         background: #f8d7da;
         color: #721c24;
       }
 
       /* SMS Opt-In Section */
       .optin-section {
-        background: #f8f9fa;
+        margin: 24px 0;
+        padding: 20px;
+        background: #f0f9ff;
         border: 2px solid #00BDFF;
         border-radius: 12px;
-        padding: 20px;
-        margin: 20px 0;
       }
 
       .optin-header {
         display: flex;
         align-items: center;
         gap: 12px;
-        margin-bottom: 12px;
+        margin-bottom: 16px;
       }
 
       .optin-icon {
-        font-size: 28px;
+        font-size: 32px;
       }
 
       .optin-title {
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 700;
         color: #151556;
       }
 
-      .optin-phone {
+      .optin-phone-display {
         background: white;
-        padding: 12px;
+        padding: 12px 16px;
         border-radius: 8px;
         margin-bottom: 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .optin-phone-number {
         font-weight: 600;
         color: #151556;
+        text-align: center;
       }
 
-      .optin-phone-link {
-        color: #00BDFF;
-        font-size: 13px;
-        cursor: pointer;
-        text-decoration: none;
+      .optin-phone-input {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 16px;
+        border: 2px solid #00BDFF;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        font-family: 'Poppins', sans-serif;
       }
 
-      .optin-phone-link:hover {
-        text-decoration: underline;
+      .optin-phone-input:focus {
+        outline: none;
+        border-color: #0099cc;
       }
 
       .optin-consent {
         font-size: 12px;
         color: #6c757d;
-        margin-bottom: 16px;
         line-height: 1.5;
+        margin-bottom: 16px;
       }
 
       .optin-buttons {
@@ -461,160 +424,103 @@
       }
 
       .btn-optin {
-        flex: 1;
+        flex: 2;
         padding: 14px;
-        font-size: 15px;
-        font-weight: 600;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        font-family: 'Poppins', sans-serif;
-        transition: all 0.2s;
-        background: #28a745;
+        background: #00BDFF;
         color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.2s;
       }
 
-      .btn-optin:hover {
-        background: #218838;
+      .btn-optin:hover:not(:disabled) {
+        background: #0099cc;
+        transform: translateY(-2px);
+      }
+
+      .btn-optin:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
       }
 
       .btn-skip {
         flex: 1;
         padding: 14px;
-        font-size: 15px;
-        font-weight: 600;
-        border: 2px solid #e9ecef;
-        border-radius: 10px;
-        cursor: pointer;
-        font-family: 'Poppins', sans-serif;
-        transition: all 0.2s;
-        background: white;
+        background: #e9ecef;
         color: #6c757d;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.2s;
       }
 
       .btn-skip:hover {
-        background: #f8f9fa;
+        background: #dee2e6;
       }
 
-      /* Phone Update Modal */
-      .phone-modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0,0,0,0.5);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 2000;
-        padding: 20px;
+      .optin-update-link {
+        display: block;
+        text-align: center;
+        font-size: 13px;
+        color: #00BDFF;
+        text-decoration: none;
+        margin-top: 8px;
       }
 
-      .phone-modal.active {
-        display: flex;
+      .optin-update-link:hover {
+        text-decoration: underline;
       }
 
-      .phone-modal-content {
-        background: white;
-        border-radius: 16px;
-        padding: 32px;
-        max-width: 400px;
-        width: 100%;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-      }
-
-      .phone-modal-title {
-        font-size: 20px;
-        font-weight: 700;
-        color: #151556;
-        margin-bottom: 8px;
-      }
-
-      .phone-modal-subtitle {
+      .optin-no-phone-msg {
         font-size: 14px;
-        color: #6c757d;
-        margin-bottom: 24px;
+        color: #856404;
+        background: #fff3cd;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        text-align: center;
       }
 
-      .phone-modal-input {
-        width: 100%;
-        padding: 14px;
-        font-size: 16px;
-        border: 2px solid #e9ecef;
-        border-radius: 10px;
-        font-family: 'Poppins', sans-serif;
-        margin-bottom: 20px;
-      }
-
-      .phone-modal-input:focus {
-        outline: none;
-        border-color: #00BDFF;
-      }
-
-      .phone-modal-buttons {
-        display: flex;
-        gap: 12px;
-      }
-
-      .btn-modal-cancel {
-        flex: 1;
-        padding: 14px;
-        border: 2px solid #e9ecef;
-        border-radius: 10px;
-        background: white;
-        color: #6c757d;
-        font-weight: 600;
-        cursor: pointer;
-        font-family: 'Poppins', sans-serif;
-      }
-
-      .btn-modal-save {
-        flex: 1;
-        padding: 14px;
-        border: none;
-        border-radius: 10px;
-        background: #00BDFF;
-        color: white;
-        font-weight: 600;
-        cursor: pointer;
-        font-family: 'Poppins', sans-serif;
-      }
-
+      /* Action Buttons */
       .action-buttons {
         display: flex;
         gap: 12px;
-        margin-top: 20px;
       }
 
       .btn-action {
         flex: 1;
-        padding: 14px;
-        font-size: 15px;
+        padding: 16px;
+        font-size: 16px;
         font-weight: 600;
         border: none;
         border-radius: 10px;
         cursor: pointer;
-        font-family: 'Poppins', sans-serif;
-        transition: all 0.2s;
+        transition: all 0.3s ease;
       }
 
       .btn-checkin {
-        background: #28a745;
-        color: white;
-      }
-
-      .btn-checkin:hover {
-        background: #218838;
-      }
-
-      .btn-serve {
         background: #00BDFF;
         color: white;
       }
 
-      .btn-serve:hover {
+      .btn-checkin:hover:not(:disabled) {
         background: #0099cc;
+        transform: translateY(-2px);
+      }
+
+      .btn-serve {
+        background: #a3e635;
+        color: #151556;
+      }
+
+      .btn-serve:hover:not(:disabled) {
+        background: #84cc16;
+        transform: translateY(-2px);
       }
 
       .btn-action:disabled {
@@ -622,865 +528,578 @@
         cursor: not-allowed;
       }
 
-      .warning-message {
-        background: #fff3cd;
-        border: 1px solid #ffc107;
-        border-radius: 8px;
-        padding: 12px;
-        margin-bottom: 16px;
-        font-size: 14px;
-        color: #856404;
-      }
-
-      .error-message {
-        background: #f8d7da;
-        border: 1px solid #dc3545;
-        border-radius: 8px;
-        padding: 12px;
-        margin-bottom: 16px;
-        font-size: 14px;
-        color: #721c24;
-      }
-
-      /* Stats */
-      .stats-card {
-        background: white;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        width: 100%;
-        max-width: 500px;
-      }
-
-      .stat-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 12px 0;
-        border-bottom: 1px solid #e9ecef;
-      }
-
-      .stat-row:last-child {
-        border-bottom: none;
-      }
-
-      .stat-label {
-        color: #6c757d;
-        font-size: 14px;
-      }
-
-      .stat-value {
-        color: #151556;
-        font-weight: 600;
-        font-size: 16px;
-      }
-
       /* Result Display */
       .result-display {
+        display: none;
         background: white;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        width: 100%;
-        max-width: 500px;
-        min-height: 100px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        border-radius: 16px;
+        padding: 48px 32px;
         text-align: center;
-      }
-
-      .result-display.success {
-        background: #d4edda;
-        border: 2px solid #28a745;
-      }
-
-      .result-display.error {
-        background: #f8d7da;
-        border: 2px solid #dc3545;
-      }
-
-      .result-display.info {
-        background: #fff3cd;
-        border: 2px solid #ffc107;
-      }
-
-      .result-display.loading {
-        background: white;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        margin-bottom: 24px;
       }
 
       .result-icon {
-        font-size: 48px;
-        margin-bottom: 12px;
+        font-size: 72px;
+        margin-bottom: 16px;
       }
 
-      .result-text {
-        font-size: 18px;
-        font-weight: 600;
-        color: #151556;
-        margin-bottom: 4px;
+      .result-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 8px;
       }
 
-      .result-subtext {
-        font-size: 14px;
+      .result-message {
+        font-size: 16px;
         color: #6c757d;
+        margin-bottom: 24px;
       }
 
-      /* History */
-      .history-card {
+      .btn-continue {
+        max-width: 200px;
+        margin: 0 auto;
+      }
+
+      /* Activity History */
+      .activity-section {
         background: white;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        width: 100%;
-        max-width: 500px;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        padding: 24px;
       }
 
-      .history-title {
-        font-weight: 600;
+      .activity-title {
+        font-size: 18px;
+        font-weight: 700;
         color: #151556;
         margin-bottom: 16px;
-        font-size: 16px;
       }
 
-      .history-item {
+      .activity-list {
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      .activity-item {
+        padding: 12px;
+        border-bottom: 1px solid #f1f3f5;
         display: flex;
         justify-content: space-between;
-        padding: 12px 0;
-        border-bottom: 1px solid #e9ecef;
+        align-items: center;
       }
 
-      .history-item:last-child {
-        border-bottom: none;
-      }
-
-      .history-name {
+      .activity-name {
         font-weight: 600;
         color: #151556;
-        font-size: 14px;
       }
 
-      .history-action {
+      .activity-action {
         font-size: 13px;
         color: #6c757d;
       }
 
-      .history-time {
-        font-size: 13px;
-        color: #6c757d;
-      }
-
-      /* Footer */
-      .scanner-footer {
-        background: white;
-        border-top: 1px solid #e9ecef;
-        padding: 16px 20px;
-        display: flex;
-        justify-content: center;
-      }
-
-      .btn-logout {
-        background: #FF3B3B;
-        color: white;
-        padding: 12px 32px;
-        border: none;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        font-family: 'Poppins', sans-serif;
-        transition: all 0.2s;
-      }
-
-      .btn-logout:hover {
-        background: #cc0000;
-      }
-
-      /* Video Scanner Overlay */
-      .video-scanner {
+      /* Phone Update Modal */
+      .modal-overlay {
+        display: none;
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0,0,0,0.95);
+        background: rgba(0, 0, 0, 0.5);
         z-index: 1000;
-        display: none;
-        flex-direction: column;
-      }
-
-      .video-scanner.active {
-        display: flex;
-      }
-
-      .video-header {
-        background: #151556;
-        color: white;
-        padding: 16px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .close-scanner {
-        background: transparent;
-        border: none;
-        color: white;
-        font-size: 28px;
-        cursor: pointer;
-        padding: 0;
-        width: 40px;
-        height: 40px;
-      }
-
-      .video-container {
-        flex: 1;
-        position: relative;
-        display: flex;
         align-items: center;
         justify-content: center;
-        overflow: hidden;
       }
 
-      #video {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-      }
-
-      .scanner-overlay {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 280px;
-        height: 280px;
-        border: 3px solid #00BDFF;
+      .modal {
+        background: white;
         border-radius: 16px;
-        box-shadow: 0 0 0 99999px rgba(0,0,0,0.5);
+        padding: 32px;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
       }
 
-      .scanner-instructions {
-        position: absolute;
-        bottom: 60px;
-        left: 0;
-        right: 0;
-        text-align: center;
-        color: white;
+      .modal-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #151556;
+        margin-bottom: 8px;
+      }
+
+      .modal-subtitle {
+        font-size: 14px;
+        color: #6c757d;
+        margin-bottom: 24px;
+      }
+
+      .modal-input {
+        width: 100%;
+        padding: 14px 16px;
         font-size: 16px;
-        padding: 0 20px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        font-family: 'Poppins', sans-serif;
       }
 
-      .camera-loading {
+      .modal-input:focus {
+        outline: none;
+        border-color: #00BDFF;
+      }
+
+      .modal-buttons {
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 16px;
+        gap: 12px;
       }
 
-      /* Loading Spinner */
+      .btn-modal-cancel {
+        flex: 1;
+        padding: 14px;
+        background: #e9ecef;
+        color: #6c757d;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .btn-modal-save {
+        flex: 1;
+        padding: 14px;
+        background: #00BDFF;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .btn-modal-save:hover {
+        background: #0099cc;
+      }
+
+      /* Spinner */
       .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #151556;
+        border-radius: 50%;
         width: 40px;
         height: 40px;
-        border: 4px solid #e9ecef;
-        border-top-color: #00BDFF;
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
       }
 
       @keyframes spin {
-        to { transform: rotate(360deg); }
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
       }
 
       /* Responsive */
-      @media (max-width: 600px) {
-        .mode-toggle {
-          padding: 12px 16px;
+      @media (max-width: 768px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
         }
 
-        .mode-btn {
-          padding: 10px 16px;
-          font-size: 13px;
+        .mode-switcher {
+          flex-direction: column;
         }
 
-        .scan-button {
-          width: 160px;
-          height: 160px;
-          font-size: 16px;
+        .action-buttons {
+          flex-direction: column;
         }
 
-        .scan-icon {
-          font-size: 40px;
+        .optin-buttons {
+          flex-direction: column;
+        }
+
+        .btn-optin, .btn-skip {
+          flex: 1;
         }
       }
     </style>
   </head>
   <body>
-    <!-- Header -->
     <div class="app-header">
-      <div class="app-title">Geaux Serve Scanner</div>
-      <div class="app-subtitle">Little Zion Community Outreach</div>
+      <div class="app-title">Little Zion Food Pantry</div>
+      <div class="app-subtitle">Staff Scanner Portal</div>
     </div>
 
     <!-- PIN Screen -->
     <div class="pin-screen" id="pinScreen">
       <div class="pin-card">
         <h2>Staff Access</h2>
-        <p>Enter your PIN to continue</p>
-        <input type="tel" class="pin-input" id="pinInput" placeholder="****" maxlength="4" />
+        <p>Enter your 4-digit PIN to continue</p>
+        <input type="password" class="pin-input" id="pinInput" maxlength="4" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
         <div class="pin-error" id="pinError">Incorrect PIN. Please try again.</div>
-        <button class="btn btn-primary" id="pinSubmit">Unlock Scanner</button>
+        <button class="btn btn-primary" id="pinSubmit">Continue</button>
       </div>
     </div>
 
-    <!-- Scanner Screen -->
-    <div class="scanner-screen" id="scannerScreen">
-      <!-- Timeout Warning -->
-      <div class="timeout-warning" id="timeoutWarning">
-        ⚠️ Session will timeout in <span id="timeoutCountdown">1</span> minute. Scan a code to stay active.
-      </div>
-
-      <!-- Mode Toggle -->
-      <div class="mode-toggle">
-        <button class="mode-btn active" id="scannerModeBtn" data-mode="scanner">
-          📷 Scanner Mode
-        </button>
-        <button class="mode-btn" id="manualModeBtn" data-mode="manual">
-          🔍 Manual Search
-        </button>
-        <div style="width: 100%; height: 1px; background: #e9ecef; margin: 8px 0;"></div>
-        <button class="mode-btn active" id="checkInMode" data-mode="checkin">
-          Check-In
-        </button>
-        <button class="mode-btn" id="serveMode" data-mode="serve">
-          Serve
-        </button>
-      </div>
-
-      <!-- Scanner Main Area -->
-      <div class="scanner-main active" id="scannerMain">
-        <!-- Scan Button -->
-        <button class="scan-button" id="scanButton">
-          <div class="scan-icon">📷</div>
-          <div>SCAN QR CODE</div>
-        </button>
-
-        <!-- Stats -->
-        <div class="stats-card">
-          <div class="stat-row">
-            <span class="stat-label">Check-Ins Today</span>
-            <span class="stat-value" id="checkInCount">0</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">Served Today</span>
-            <span class="stat-value" id="servedCount">0</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">Current Action</span>
-            <span class="stat-value" id="currentMode">Check-In</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">Session Time</span>
-            <span class="stat-value" id="sessionTime">0m 0s</span>
-          </div>
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Check-Ins Today</div>
+          <div class="stat-value" id="checkInCount">0</div>
         </div>
-
-        <!-- Result Display -->
-        <div class="result-display" id="resultDisplay">
-          <div>
-            <div class="result-text">Ready to scan</div>
-            <div class="result-subtext">Tap the button above to start</div>
-          </div>
-        </div>
-
-        <!-- Scan History -->
-        <div class="history-card">
-          <div class="history-title">Recent Scans</div>
-          <div id="historyList">
-            <div style="color: #6c757d; text-align: center; padding: 20px; font-size: 14px;">
-              No scans yet
-            </div>
-          </div>
+        <div class="stat-card">
+          <div class="stat-label">Served Today</div>
+          <div class="stat-value" id="servedCount">0</div>
         </div>
       </div>
 
-      <!-- Manual Search Main Area -->
-      <div class="manual-main" id="manualMain">
-        <!-- Search Box -->
+      <!-- Mode Switcher -->
+      <div class="mode-switcher">
+        <button class="mode-btn active" id="scannerModeBtn">📷 QR Scanner</button>
+        <button class="mode-btn" id="manualModeBtn">🔍 Manual Search</button>
+      </div>
+
+      <!-- Result Display -->
+      <div class="result-display" id="resultDisplay">
+        <div class="result-icon" id="resultIcon">✓</div>
+        <div class="result-title" id="resultTitle">Success!</div>
+        <div class="result-message" id="resultMessage">Action completed</div>
+        <button class="btn btn-primary btn-continue" id="continueBtn">Continue</button>
+      </div>
+
+      <!-- Scanner Container -->
+      <div class="scanner-container" id="scannerContainer">
+        <div class="scanner-title">Scan QR Code</div>
+        <div class="scanner-subtitle">Point camera at household's digital card</div>
+        <div id="reader"></div>
+      </div>
+
+      <!-- Manual Search Container -->
+      <div class="manual-search-container" id="manualSearchContainer">
+        <div class="scanner-title">Search Household</div>
+        <div class="scanner-subtitle">Search by name, phone, or address</div>
+        
         <div class="search-box">
           <input type="text" class="search-input" id="searchInput" placeholder="Search by name, phone, or address..." />
-          <button class="search-btn" id="searchBtn">Search</button>
+          <button class="btn btn-primary btn-search" id="searchBtn">Search</button>
         </div>
 
-        <!-- Search Results -->
-        <div class="search-results" id="searchResults">
-          <!-- Results populated by JavaScript -->
-        </div>
-
-        <!-- Household Details -->
-        <div class="household-card" id="householdCard">
-          <!-- Populated by JavaScript when household is selected -->
-        </div>
-
-        <!-- Stats (same as scanner) -->
-        <div class="stats-card">
-          <div class="stat-row">
-            <span class="stat-label">Check-Ins Today</span>
-            <span class="stat-value" id="checkInCount2">0</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">Served Today</span>
-            <span class="stat-value" id="servedCount2">0</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">Current Action</span>
-            <span class="stat-value" id="currentMode2">Check-In</span>
-          </div>
-        </div>
+        <div class="search-results" id="searchResults"></div>
       </div>
 
-      <!-- Footer -->
-      <div class="scanner-footer">
-        <button class="btn-logout" id="logoutBtn">Logout</button>
-      </div>
-    </div>
+      <!-- Household Details Card -->
+      <div class="household-details-card" id="householdCard"></div>
 
-    <!-- Video Scanner Overlay -->
-    <div class="video-scanner" id="videoScanner">
-      <div class="video-header">
-        <div style="font-weight: 600; font-size: 16px;">Scanning QR Code</div>
-        <button class="close-scanner" id="closeScanner">×</button>
-      </div>
-      <div class="video-container">
-        <video id="video" autoplay playsinline></video>
-        <div class="scanner-overlay"></div>
-        <div class="scanner-instructions">Position QR code within the frame</div>
+      <!-- Activity History -->
+      <div class="activity-section">
+        <div class="activity-title">Recent Activity</div>
+        <div class="activity-list" id="activityList">
+          <div style="text-align: center; padding: 24px; color: #6c757d;">No activity yet</div>
+        </div>
       </div>
     </div>
 
     <!-- Phone Update Modal -->
-    <div class="phone-modal" id="phoneModal">
-      <div class="phone-modal-content">
-        <div class="phone-modal-title">Update Phone Number</div>
-        <div class="phone-modal-subtitle">Enter the correct phone number</div>
-        <input type="tel" class="phone-modal-input" id="phoneModalInput" placeholder="(555) 123-4567" />
-        <div class="phone-modal-buttons">
-          <button class="btn-modal-cancel" id="phoneModalCancel">Cancel</button>
-          <button class="btn-modal-save" id="phoneModalSave">Save & Send Card</button>
+    <div class="modal-overlay" id="phoneModal">
+      <div class="modal">
+        <div class="modal-title">Update Phone Number</div>
+        <div class="modal-subtitle">Enter the new phone number</div>
+        <input type="tel" class="modal-input" id="phoneInput" placeholder="(555) 123-4567" />
+        <div class="modal-buttons">
+          <button class="btn-modal-cancel" id="cancelPhoneBtn">Cancel</button>
+          <button class="btn-modal-save" id="savePhoneBtn">Save & Send SMS</button>
         </div>
       </div>
     </div>
 
-    <!-- jsQR Library -->
-    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
-
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
       // Configuration
-      const CORRECT_PIN = "2026";
-      const TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
-      const WARNING_MS = 14 * 60 * 1000; // 14 minutes
       const API_URL = "https://script.google.com/macros/s/AKfycbxaf_vQoT_63-VR1uE09LMBIw6zOuquyPqAkEh_uqsnefp2FTBzxnhz58HeMv0Jb30-/exec";
 
       // DOM Elements
       const pinScreen = document.getElementById('pinScreen');
+      const mainContent = document.getElementById('mainContent');
       const pinInput = document.getElementById('pinInput');
-      const pinSubmit = document.getElementById('pinSubmit');
       const pinError = document.getElementById('pinError');
-      
-      const scannerScreen = document.getElementById('scannerScreen');
-      const timeoutWarning = document.getElementById('timeoutWarning');
-      const timeoutCountdown = document.getElementById('timeoutCountdown');
-      
-      const scannerModeBtn = document.getElementById('scannerModeBtn');
-      const manualModeBtn = document.getElementById('manualModeBtn');
-      const checkInModeBtn = document.getElementById('checkInMode');
-      const serveModeBtn = document.getElementById('serveMode');
-      
-      const scannerMain = document.getElementById('scannerMain');
-      const manualMain = document.getElementById('manualMain');
-      
-      const scanButton = document.getElementById('scanButton');
-      const videoScanner = document.getElementById('videoScanner');
-      const video = document.getElementById('video');
-      const closeScanner = document.getElementById('closeScanner');
-      
-      const searchInput = document.getElementById('searchInput');
-      const searchBtn = document.getElementById('searchBtn');
-      const searchResults = document.getElementById('searchResults');
+      const scannerContainer = document.getElementById('scannerContainer');
+      const manualSearchContainer = document.getElementById('manualSearchContainer');
       const householdCard = document.getElementById('householdCard');
-      
+      const searchInput = document.getElementById('searchInput');
+      const searchResults = document.getElementById('searchResults');
+      const resultDisplay = document.getElementById('resultDisplay');
+      const activityList = document.getElementById('activityList');
       const checkInCountEl = document.getElementById('checkInCount');
       const servedCountEl = document.getElementById('servedCount');
-      const currentModeEl = document.getElementById('currentMode');
-      const sessionTimeEl = document.getElementById('sessionTime');
-      const checkInCountEl2 = document.getElementById('checkInCount2');
-      const servedCountEl2 = document.getElementById('servedCount2');
-      const currentModeEl2 = document.getElementById('currentMode2');
-      
-      const resultDisplay = document.getElementById('resultDisplay');
-      const historyList = document.getElementById('historyList');
-      const logoutBtn = document.getElementById('logoutBtn');
-
-      // Phone modal elements
       const phoneModal = document.getElementById('phoneModal');
-      const phoneModalInput = document.getElementById('phoneModalInput');
-      const phoneModalCancel = document.getElementById('phoneModalCancel');
-      const phoneModalSave = document.getElementById('phoneModalSave');
 
       // State
-      let authenticated = false;
+      let currentMode = 'checkin';
       let currentInterfaceMode = 'scanner'; // 'scanner' or 'manual'
-      let currentMode = 'checkin'; // 'checkin' or 'serve'
+      let html5QrCode;
+      let selectedHousehold = null;
+      let activityHistory = [];
       let checkInCount = 0;
       let serveCount = 0;
-      let scanHistory = [];
-      let sessionStartTime = null;
-      let sessionTimeInterval = null;
-      let idleTimer = null;
-      let warningTimer = null;
-      let stream = null;
-      let scanningActive = false;
-      let selectedHousehold = null;
+      const SESSION_KEY = 'scannerSessionData';
 
-      // Load session data on page load
-      loadSessionData();
-
-      // PIN Authentication
-      pinInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') pinSubmit.click();
-      });
-
-      pinSubmit.addEventListener('click', () => {
-        const pin = pinInput.value;
-        if (pin === CORRECT_PIN) {
-          authenticated = true;
-          pinScreen.style.display = 'none';
-          scannerScreen.classList.add('active');
-          sessionStartTime = Date.now();
-          startSessionTimer();
-          startIdleTimer();
-          loadSessionData();
-        } else {
-          pinError.style.display = 'block';
-          pinInput.value = '';
-          pinInput.focus();
-        }
-      });
-
-      // Session Timer
-      function startSessionTimer() {
-        sessionTimeInterval = setInterval(() => {
-          const elapsed = Date.now() - sessionStartTime;
-          const minutes = Math.floor(elapsed / 60000);
-          const seconds = Math.floor((elapsed % 60000) / 1000);
-          sessionTimeEl.textContent = minutes + 'm ' + seconds + 's';
-        }, 1000);
-      }
-
-      // Idle Timer
-      function startIdleTimer() {
-        resetIdleTimer();
-      }
-
-      function resetIdleTimer() {
-        if (!authenticated) return;
-        
-        clearTimeout(idleTimer);
-        clearTimeout(warningTimer);
-        timeoutWarning.classList.remove('active');
-
-        warningTimer = setTimeout(() => {
-          timeoutWarning.classList.add('active');
-          let countdown = 60;
-          timeoutCountdown.textContent = countdown;
-          
-          const countdownInterval = setInterval(() => {
-            countdown--;
-            timeoutCountdown.textContent = countdown;
-            if (countdown <= 0) {
-              clearInterval(countdownInterval);
+      // Load session data
+      function loadSessionData() {
+        try {
+          const saved = localStorage.getItem(SESSION_KEY);
+          if (saved) {
+            const data = JSON.parse(saved);
+            const today = new Date().toDateString();
+            if (data.date === today) {
+              activityHistory = data.history || [];
+              checkInCount = data.checkInCount || 0;
+              serveCount = data.serveCount || 0;
+              updateActivityDisplay();
+              checkInCountEl.textContent = checkInCount;
+              servedCountEl.textContent = serveCount;
             }
-          }, 1000);
-        }, WARNING_MS);
-
-        idleTimer = setTimeout(() => {
-          logout();
-        }, TIMEOUT_MS);
+          }
+        } catch (e) {
+          console.error('Failed to load session data:', e);
+        }
       }
 
-      // Interface Mode Toggle (Scanner vs Manual)
-      scannerModeBtn.addEventListener('click', () => setInterfaceMode('scanner'));
-      manualModeBtn.addEventListener('click', () => setInterfaceMode('manual'));
+      // Save session data
+      function saveSessionData() {
+        try {
+          const data = {
+            date: new Date().toDateString(),
+            history: activityHistory,
+            checkInCount: checkInCount,
+            serveCount: serveCount
+          };
+          localStorage.setItem(SESSION_KEY, JSON.stringify(data));
+        } catch (e) {
+          console.error('Failed to save session data:', e);
+        }
+      }
 
-      function setInterfaceMode(mode) {
+      // PIN verification
+      document.getElementById('pinSubmit').addEventListener('click', verifyPin);
+      pinInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') verifyPin();
+      });
+
+      async function verifyPin() {
+        const pin = pinInput.value;
+        if (pin.length !== 4) return;
+
+        try {
+          const response = await fetch(`${API_URL}?action=verifyPin&pin=${pin}`);
+          const data = await response.json();
+
+          if (data.ok) {
+            pinScreen.style.display = 'none';
+            mainContent.style.display = 'flex';
+            loadSessionData();
+            initScanner();
+          } else {
+            pinError.style.display = 'block';
+            pinInput.value = '';
+            setTimeout(() => {
+              pinError.style.display = 'none';
+            }, 3000);
+          }
+        } catch (error) {
+          console.error('PIN verification failed:', error);
+          alert('Network error. Please try again.');
+        }
+      }
+
+      // Mode switching
+      document.getElementById('scannerModeBtn').addEventListener('click', () => {
+        switchMode('scanner');
+      });
+
+      document.getElementById('manualModeBtn').addEventListener('click', () => {
+        switchMode('manual');
+      });
+
+      function switchMode(mode) {
         currentInterfaceMode = mode;
-        resetIdleTimer();
+        
+        document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
         
         if (mode === 'scanner') {
-          scannerModeBtn.classList.add('active');
-          manualModeBtn.classList.remove('active');
-          scannerMain.classList.add('active');
-          scannerMain.classList.remove('hidden');
-          manualMain.classList.remove('active');
-        } else {
-          manualModeBtn.classList.add('active');
-          scannerModeBtn.classList.remove('active');
-          manualMain.classList.add('active');
-          scannerMain.classList.remove('active');
-          scannerMain.classList.add('hidden');
-        }
-      }
-
-      // Action Mode Toggle (Check-In vs Serve)
-      checkInModeBtn.addEventListener('click', () => setMode('checkin'));
-      serveModeBtn.addEventListener('click', () => setMode('serve'));
-
-      function setMode(mode) {
-        currentMode = mode;
-        resetIdleTimer();
-        
-        if (mode === 'checkin') {
-          checkInModeBtn.classList.add('active');
-          serveModeBtn.classList.remove('active');
-          currentModeEl.textContent = 'Check-In';
-          currentModeEl2.textContent = 'Check-In';
-        } else {
-          serveModeBtn.classList.add('active');
-          checkInModeBtn.classList.remove('active');
-          currentModeEl.textContent = 'Serve';
-          currentModeEl2.textContent = 'Serve';
-        }
-        saveSessionData();
-      }
-
-      // Scanner
-      scanButton.addEventListener('click', openScanner);
-      closeScanner.addEventListener('click', closeVideoScanner);
-
-      async function openScanner() {
-        resetIdleTimer();
-        
-        videoScanner.classList.add('active');
-        video.style.display = 'none';
-        document.querySelector('.scanner-overlay').style.display = 'none';
-        document.querySelector('.scanner-instructions').innerHTML = '<div class="camera-loading"><div class="spinner"></div>Initializing camera...</div>';
-        
-        try {
-          const constraints = {
-            video: {
-              facingMode: 'environment',
-              width: { ideal: 1280 },
-              height: { ideal: 720 }
-            }
-          };
-          
-          stream = await navigator.mediaDevices.getUserMedia(constraints);
-          video.srcObject = stream;
-          
-          await new Promise((resolve) => {
-            video.onloadedmetadata = () => {
-              video.play();
-              resolve();
-            };
-          });
-          
-          video.style.display = 'block';
-          document.querySelector('.scanner-overlay').style.display = 'block';
-          document.querySelector('.scanner-instructions').innerHTML = 'Position QR code within the frame';
-          
-          scanningActive = true;
-          
-          setTimeout(() => {
-            scanFrame();
-          }, 500);
-          
-        } catch (err) {
-          console.error('Camera error:', err);
-          videoScanner.classList.remove('active');
-          
-          let errorMsg = 'Camera access denied';
-          if (err.name === 'NotAllowedError') {
-            errorMsg = 'Camera permission denied. Please enable camera access in your browser settings.';
-          } else if (err.name === 'NotFoundError') {
-            errorMsg = 'No camera found on this device.';
-          } else if (err.name === 'NotReadableError') {
-            errorMsg = 'Camera is already in use by another app.';
+          document.getElementById('scannerModeBtn').classList.add('active');
+          scannerContainer.style.display = 'block';
+          manualSearchContainer.style.display = 'none';
+          householdCard.style.display = 'none';
+          resultDisplay.style.display = 'none';
+          if (html5QrCode) {
+            html5QrCode.resume();
           }
-          showResult('error', 'Camera Error', errorMsg);
-        }
-      }
-
-      function closeVideoScanner() {
-        scanningActive = false;
-        if (stream) {
-          stream.getTracks().forEach(track => track.stop());
-        }
-        videoScanner.classList.remove('active');
-        video.style.display = 'block';
-        document.querySelector('.scanner-overlay').style.display = 'block';
-        document.querySelector('.scanner-instructions').innerHTML = 'Position QR code within the frame';
-      }
-
-      function scanFrame() {
-        if (!scanningActive) return;
-
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        
-        if (video.readyState === video.HAVE_ENOUGH_DATA) {
-          canvas.height = video.videoHeight;
-          canvas.width = video.videoWidth;
-          context.drawImage(video, 0, 0, canvas.width, canvas.height);
-          const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-          const code = jsQR(imageData.data, imageData.width, imageData.height);
-          
-          if (code) {
-            processQRCode(code.data);
-            return;
+        } else {
+          document.getElementById('manualModeBtn').classList.add('active');
+          scannerContainer.style.display = 'none';
+          manualSearchContainer.style.display = 'block';
+          householdCard.style.display = 'none';
+          resultDisplay.style.display = 'none';
+          searchResults.style.display = 'none';
+          searchInput.value = '';
+          if (html5QrCode) {
+            html5QrCode.pause();
           }
         }
-        
-        requestAnimationFrame(scanFrame);
       }
 
-      function processQRCode(data) {
-        closeVideoScanner();
-        resetIdleTimer();
+      // Initialize QR scanner
+      function initScanner() {
+        html5QrCode = new Html5Qrcode("reader");
+        
+        html5QrCode.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: { width: 250, height: 250 } },
+          onScanSuccess,
+          onScanError
+        ).catch(err => {
+          console.error('QR scanner error:', err);
+          alert('Camera access denied or not available');
+        });
+      }
 
+      function onScanSuccess(decodedText) {
         try {
-          const url = new URL(data);
+          const url = new URL(decodedText);
           const id = url.searchParams.get('id');
-          const token = url.searchParams.get('t');
+          const t = url.searchParams.get('t');
           
-          if (!id || !token) {
-            showResult('error', 'Invalid QR Code', 'This QR code is not valid for check-in');
-            return;
+          if (id && t) {
+            html5QrCode.pause();
+            processCheckIn(id, t);
           }
-
-          processCheckIn(id, token);
-        } catch (err) {
-          showResult('error', 'Invalid QR Code', 'Could not read QR code data');
+        } catch (e) {
+          console.error('Invalid QR code:', e);
         }
       }
 
-      // Manual Search
-      searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') searchBtn.click();
-      });
+      function onScanError(errorMessage) {
+        // Ignore scan errors (they happen constantly)
+      }
 
-      searchBtn.addEventListener('click', performSearch);
+      // Manual search
+      document.getElementById('searchBtn').addEventListener('click', performSearch);
+      searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') performSearch();
+      });
 
       async function performSearch() {
         const query = searchInput.value.trim();
         if (!query) return;
 
-        resetIdleTimer();
-        searchResults.innerHTML = '<div class="no-results"><div class="spinner"></div></div>';
-        searchResults.classList.add('active');
-        householdCard.classList.remove('active');
+        searchResults.innerHTML = '<div style="text-align: center; padding: 24px;"><div class="spinner"></div></div>';
+        searchResults.style.display = 'block';
 
         try {
-          const url = `${API_URL}?action=search&query=${encodeURIComponent(query)}`;
-          const response = await fetch(url);
+          const response = await fetch(`${API_URL}?action=search&query=${encodeURIComponent(query)}`);
           const data = await response.json();
 
           if (data.success && data.results && data.results.length > 0) {
-            displaySearchResults(data.results);
+            searchResults.innerHTML = data.results.map(result => `
+              <div class="result-item" onclick="selectHousehold('${result.contactId}', '${result.token}')">
+                <div class="result-name">${result.name}</div>
+                <div class="result-details">${result.phone || ''} ${result.address ? '• ' + result.address : ''}</div>
+              </div>
+            `).join('');
           } else {
-            searchResults.innerHTML = '<div class="no-results">No households found matching "' + query + '"</div>';
+            searchResults.innerHTML = '<div style="text-align: center; padding: 24px; color: #6c757d;">No results found</div>';
           }
-        } catch (err) {
-          searchResults.innerHTML = '<div class="no-results">Search failed. Please try again.</div>';
+        } catch (error) {
+          console.error('Search error:', error);
+          searchResults.innerHTML = '<div style="text-align: center; padding: 24px; color: #FF3B3B;">Search failed. Please try again.</div>';
         }
       }
 
-      function displaySearchResults(results) {
-        searchResults.innerHTML = results.map(result => `
-          <div class="search-result-item" onclick="selectHousehold('${result.contactId}', '${result.token}')">
-            <div class="result-name">${result.name}</div>
-            <div class="result-details">${result.phone || ''} ${result.address ? '• ' + result.address : ''}</div>
-          </div>
-        `).join('');
-      }
-
       async function selectHousehold(contactId, token) {
-        resetIdleTimer();
-        searchResults.classList.remove('active');
-        householdCard.innerHTML = '<div style="text-align: center; padding: 32px;"><div class="spinner"></div></div>';
-        householdCard.classList.add('active');
+        searchResults.style.display = 'none';
+        householdCard.innerHTML = '<div style="text-align: center; padding: 32px;"><div class="spinner"></div><div style="margin-top: 16px;">Loading...</div></div>';
+        householdCard.style.display = 'block';
 
         try {
-          const url = `${API_URL}?action=loadHousehold&id=${contactId}&token=${token}`;
-          const response = await fetch(url);
+          const response = await fetch(`${API_URL}?action=loadHousehold&id=${contactId}&t=${token}`);
           const data = await response.json();
 
           if (data.success) {
-            selectedHousehold = { contactId, token, data: data };
+            selectedHousehold = { contactId, token, phone: data.phone };
             displayHouseholdDetails(data);
           } else {
-            householdCard.innerHTML = '<div class="error-message">Failed to load household details</div>';
+            householdCard.innerHTML = `<div style="text-align: center; padding: 32px; color: #FF3B3B;">Failed to load household: ${data.message}</div>`;
           }
-        } catch (err) {
-          householdCard.innerHTML = '<div class="error-message">Connection error. Please try again.</div>';
+        } catch (error) {
+          console.error('Load household error:', error);
+          householdCard.innerHTML = '<div style="text-align: center; padding: 32px; color: #FF3B3B;">Network error. Please try again.</div>';
         }
       }
 
       function displayHouseholdDetails(data) {
         let statusBadge = '';
-        let statusClass = '';
         let message = '';
         let canCheckIn = false;
         let canServe = false;
-        let showOptIn = false;
 
-        // Determine eligibility
-        if (data.status === 'Pending') {
-          statusBadge = '<span class="status-badge status-denied">Not Approved</span>';
-          message = '<div class="error-message">This application has not been approved yet.</div>';
-        } else if (data.status === 'Denied') {
-          statusBadge = '<span class="status-badge status-denied">Denied</span>';
-          message = '<div class="error-message">This application has been denied.</div>';
-        } else if (data.expired) {
-          statusBadge = '<span class="status-badge status-denied">Expired</span>';
-          message = '<div class="error-message">This application expired on ' + data.expirationDate + '</div>';
-        } else if (data.alreadyCheckedIn && data.alreadyServed) {
-          statusBadge = '<span class="status-badge status-warning">Already Served</span>';
-          message = '<div class="warning-message">Already checked in and served today.</div>';
-        } else if (data.alreadyCheckedIn) {
-          statusBadge = '<span class="status-badge status-warning">Checked In</span>';
-          message = '<div class="warning-message">Already checked in today. Ready to be served.</div>';
-          canServe = true;
-          showOptIn = true; // Show opt-in when they check in
+        if (data.expired) {
+          statusBadge = '<span class="status-badge status-expired">⚠ Expired</span>';
+          message = '<div style="background: #f8d7da; padding: 16px; border-radius: 8px; margin-bottom: 16px; color: #721c24; text-align: center;">Application has expired. Please renew.</div>';
         } else if (data.alreadyServed) {
-          statusBadge = '<span class="status-badge status-warning">Already Served</span>';
-          message = '<div class="warning-message">Already served this month.</div>';
+          statusBadge = '<span class="status-badge status-served">✓ Already Served</span>';
+          message = '<div style="background: #fff3cd; padding: 16px; border-radius: 8px; margin-bottom: 16px; color: #856404; text-align: center;">Already served today.</div>';
+        } else if (data.alreadyCheckedIn) {
+          statusBadge = '<span class="status-badge status-served">✓ Checked In</span>';
+          canServe = true;
         } else {
           statusBadge = '<span class="status-badge status-eligible">✓ Eligible</span>';
           canCheckIn = true;
           canServe = true;
-          showOptIn = true; // Show opt-in for eligible households
         }
 
-        // Build SMS opt-in section HTML
-        let optInSection = '';
-        if (showOptIn && data.phone) {
-          optInSection = `
-            <div class="optin-section">
-              <div class="optin-header">
-                <div class="optin-icon">📱</div>
-                <div class="optin-title">Digital Card Opt-In</div>
+        // Build SMS opt-in section
+        let optinSection = '';
+        const hasPhone = data.phone && data.phone !== 'N/A';
+        
+        if (!data.alreadyServed && !data.expired) {
+          if (hasPhone) {
+            // Has phone - show current number with opt-in button
+            optinSection = `
+              <div class="optin-section">
+                <div class="optin-header">
+                  <div class="optin-icon">📱</div>
+                  <div class="optin-title">Digital Card Opt-In</div>
+                </div>
+                <div class="optin-phone-display">${data.phone}</div>
+                <div class="optin-consent">
+                  By clicking "Text Me My Card", you consent to receive your digital card via text message. Standard message rates may apply. You can opt out at any time.
+                </div>
+                <div class="optin-buttons">
+                  <button class="btn-optin" onclick="handleOptIn()">✓ Yes, Text Me My Card</button>
+                  <button class="btn-skip" onclick="skipOptIn()">Skip</button>
+                </div>
+                <a href="#" class="optin-update-link" onclick="event.preventDefault(); showPhoneModal();">Wrong number? Update here</a>
               </div>
-              <div class="optin-phone">
-                <span class="optin-phone-number">${data.phone}</span>
-                <a href="#" class="optin-phone-link" onclick="showPhoneModal(event)">Wrong number?</a>
+            `;
+          } else {
+            // No phone - show input field
+            optinSection = `
+              <div class="optin-section">
+                <div class="optin-header">
+                  <div class="optin-icon">📱</div>
+                  <div class="optin-title">Digital Card Opt-In</div>
+                </div>
+                <div class="optin-no-phone-msg">📵 No phone number on file</div>
+                <input type="tel" class="optin-phone-input" id="optinPhoneInput" placeholder="(555) 123-4567" />
+                <div class="optin-consent">
+                  By clicking "Text Me My Card", you consent to receive your digital card via text message. Standard message rates may apply.
+                </div>
+                <div class="optin-buttons">
+                  <button class="btn-optin" id="optinWithPhoneBtn" onclick="handleOptInWithPhone()">✓ Text Me My Card</button>
+                  <button class="btn-skip" onclick="skipOptIn()">Skip</button>
+                </div>
               </div>
-              <div class="optin-consent">
-                By clicking "Yes, Text Me", this person consents to receive their digital food pantry card via SMS. Message & data rates may apply. Reply STOP to opt out.
-              </div>
-              <div class="optin-buttons">
-                <button class="btn-optin" onclick="sendOptInSMS(event)">✓ Yes, Text Me My Card</button>
-                <button class="btn-skip" onclick="skipOptIn(event)">Skip</button>
-              </div>
-            </div>
-          `;
+            `;
+          }
         }
 
         householdCard.innerHTML = `
@@ -1513,8 +1132,8 @@
               <span class="info-value">${data.expirationDate || 'N/A'}</span>
             </div>
           </div>
-
-          ${optInSection}
+          
+          ${optinSection}
           
           <div class="action-buttons">
             <button class="btn-action btn-checkin" id="manualCheckInBtn" ${canCheckIn ? '' : 'disabled'}>
@@ -1540,82 +1159,101 @@
       }
 
       // SMS Opt-In Functions
-      function showPhoneModal(event) {
-        event.preventDefault();
-        phoneModal.classList.add('active');
-        phoneModalInput.value = selectedHousehold.data.phone || '';
-        phoneModalInput.focus();
+      function handleOptIn() {
+        sendOptInSMS(null);
       }
 
-      function hidePhoneModal() {
-        phoneModal.classList.remove('active');
-        phoneModalInput.value = '';
-      }
-
-      phoneModalCancel.addEventListener('click', hidePhoneModal);
-
-      phoneModalSave.addEventListener('click', async () => {
-        const newPhone = phoneModalInput.value.trim();
-        if (!newPhone) {
+      function handleOptInWithPhone() {
+        const phoneInput = document.getElementById('optinPhoneInput');
+        const phone = phoneInput.value.trim();
+        
+        if (!phone) {
           alert('Please enter a phone number');
           return;
         }
         
-        hidePhoneModal();
-        await handleOptIn(newPhone);
-      });
-
-      async function sendOptInSMS(event) {
-        event.preventDefault();
-        await handleOptIn(null); // Use existing phone number
-      }
-
-      function skipOptIn(event) {
-        event.preventDefault();
-        // Just hide the opt-in section
-        const optinSection = document.querySelector('.optin-section');
-        if (optinSection) {
-          optinSection.style.display = 'none';
+        // Basic phone validation (10 digits)
+        const cleaned = phone.replace(/\D/g, '');
+        if (cleaned.length < 10) {
+          alert('Please enter a valid 10-digit phone number');
+          return;
         }
+        
+        sendOptInSMS(phone);
       }
 
-      async function handleOptIn(phoneNumber) {
-        // Show loading
-        householdCard.innerHTML = '<div style="text-align: center; padding: 32px;"><div class="spinner"></div><div style="margin-top: 16px;">Sending digital card...</div></div>';
-        
+      async function sendOptInSMS(phoneNumber) {
+        if (!selectedHousehold) return;
+
+        // Show loading state
+        const optinButtons = document.querySelector('.optin-buttons');
+        const originalHTML = optinButtons.innerHTML;
+        optinButtons.innerHTML = '<div style="text-align: center; padding: 16px;"><div class="spinner"></div><div style="margin-top: 8px; color: #6c757d;">Sending...</div></div>';
+
         try {
           let url = `${API_URL}?action=optInAndSendCard&contactId=${selectedHousehold.contactId}`;
           if (phoneNumber) {
             url += `&phone=${encodeURIComponent(phoneNumber)}`;
           }
-          
+
           const response = await fetch(url);
           const data = await response.json();
-          
+
           if (data.success) {
-            householdCard.innerHTML = `
-              <div style="text-align: center; padding: 32px; background: #d4edda; border-radius: 12px;">
-                <div style="font-size: 48px; margin-bottom: 16px;">✓</div>
-                <div style="font-size: 20px; font-weight: 600; color: #155724; margin-bottom: 8px;">Digital Card Sent!</div>
-                <div style="color: #155724; margin-bottom: 16px;">${data.message}</div>
-                <button class="btn btn-primary" onclick="householdCard.classList.remove('active'); searchInput.value = ''; searchInput.focus();">Done</button>
+            // Success - show confirmation
+            document.querySelector('.optin-section').innerHTML = `
+              <div style="text-align: center; padding: 24px; background: #d4edda; border-radius: 12px;">
+                <div style="font-size: 48px; margin-bottom: 12px;">✓</div>
+                <div style="font-size: 18px; font-weight: 700; color: #155724; margin-bottom: 8px;">Digital Card Sent!</div>
+                <div style="color: #155724; font-size: 14px;">${data.message || 'SMS sent successfully'}</div>
               </div>
             `;
           } else {
-            householdCard.innerHTML = `
-              <div class="error-message">
-                <strong>Failed to send card</strong><br>${data.message || 'Please try again'}
-              </div>
-              <button class="btn btn-primary" style="margin-top: 16px;" onclick="selectHousehold('${selectedHousehold.contactId}', '${selectedHousehold.token}')">Back</button>
-            `;
+            // Failed - restore buttons and show error
+            optinButtons.innerHTML = originalHTML;
+            alert(data.message || 'Failed to send SMS. Please try again.');
           }
-        } catch (err) {
-          householdCard.innerHTML = `
-            <div class="error-message">Connection error. Please try again.</div>
-            <button class="btn btn-primary" style="margin-top: 16px;" onclick="selectHousehold('${selectedHousehold.contactId}', '${selectedHousehold.token}')">Back</button>
-          `;
+        } catch (error) {
+          console.error('Opt-in error:', error);
+          optinButtons.innerHTML = originalHTML;
+          alert('Network error. Please try again.');
         }
       }
+
+      function skipOptIn() {
+        document.querySelector('.optin-section').innerHTML = `
+          <div style="text-align: center; padding: 20px; color: #6c757d; font-size: 14px;">
+            Digital card opt-in skipped
+          </div>
+        `;
+      }
+
+      function showPhoneModal() {
+        phoneModal.style.display = 'flex';
+        document.getElementById('phoneInput').value = '';
+        document.getElementById('phoneInput').focus();
+      }
+
+      document.getElementById('cancelPhoneBtn').addEventListener('click', () => {
+        phoneModal.style.display = 'none';
+      });
+
+      document.getElementById('savePhoneBtn').addEventListener('click', () => {
+        const phone = document.getElementById('phoneInput').value.trim();
+        if (!phone) {
+          alert('Please enter a phone number');
+          return;
+        }
+        
+        const cleaned = phone.replace(/\D/g, '');
+        if (cleaned.length < 10) {
+          alert('Please enter a valid 10-digit phone number');
+          return;
+        }
+        
+        phoneModal.style.display = 'none';
+        sendOptInSMS(phone);
+      });
 
       // API Call (works for both scanner and manual)
       async function processCheckIn(contactId, token, actionOverride = null) {
@@ -1639,11 +1277,9 @@
             if (action === 'checkin') {
               checkInCount++;
               checkInCountEl.textContent = checkInCount;
-              checkInCountEl2.textContent = checkInCount;
             } else {
               serveCount++;
               servedCountEl.textContent = serveCount;
-              servedCountEl2.textContent = serveCount;
             }
             
             addToHistory(data.householdName, action);
@@ -1659,139 +1295,100 @@
                   <div style="color: #155724;">${actionText} successfully</div>
                 </div>
               `;
+              
               setTimeout(() => {
-                householdCard.classList.remove('active');
+                householdCard.style.display = 'none';
                 searchInput.value = '';
-                searchInput.focus();
               }, 3000);
             } else {
-              showResult('success', '✓ ' + data.householdName, actionText + ' successfully');
+              showResult('success', data.householdName, actionText + ' successfully');
             }
           } else {
-            const errorMsg = data.message || 'Operation failed';
-            
+            const errorMsg = data.message || 'Action failed';
             if (currentInterfaceMode === 'manual') {
               householdCard.innerHTML = `
-                <div class="error-message">
-                  <strong>${data.householdName || 'Error'}</strong><br>${errorMsg}
+                <div style="text-align: center; padding: 32px; background: #f8d7da; border-radius: 12px;">
+                  <div style="font-size: 48px; margin-bottom: 16px;">✗</div>
+                  <div style="font-size: 18px; font-weight: 600; color: #721c24; margin-bottom: 8px;">Error</div>
+                  <div style="color: #721c24;">${errorMsg}</div>
                 </div>
-                <button class="btn btn-primary" style="margin-top: 16px;" onclick="householdCard.classList.remove('active')">Close</button>
               `;
             } else {
-              if (data.message && data.message.toLowerCase().includes('already served')) {
-                showResult('info', data.householdName || 'Household', 'Already served today');
-              } else {
-                showResult('error', 'Error', errorMsg);
-              }
+              showResult('error', 'Error', errorMsg);
             }
           }
-        } catch (err) {
+        } catch (error) {
+          console.error('API error:', error);
+          const errorMsg = 'Network error. Please try again.';
           if (currentInterfaceMode === 'manual') {
             householdCard.innerHTML = `
-              <div class="error-message">Connection error. Please try again.</div>
-              <button class="btn btn-primary" style="margin-top: 16px;" onclick="householdCard.classList.remove('active')">Close</button>
+              <div style="text-align: center; padding: 32px; background: #f8d7da; border-radius: 12px;">
+                <div style="font-size: 48px; margin-bottom: 16px;">✗</div>
+                <div style="color: #721c24;">${errorMsg}</div>
+              </div>
             `;
           } else {
-            showResult('error', 'Connection Error', 'Could not connect to server');
+            showResult('error', 'Network Error', errorMsg);
           }
         }
       }
 
-      // Result Display (for scanner mode)
-      function showResult(type, text, subtext) {
-        resultDisplay.className = 'result-display ' + type;
-        
-        if (type === 'loading') {
-          resultDisplay.innerHTML = '<div><div class="spinner"></div><div class="result-text" style="margin-top: 16px;">' + text + '</div></div>';
+      function showResult(type, title, message) {
+        const icon = document.getElementById('resultIcon');
+        const titleEl = document.getElementById('resultTitle');
+        const messageEl = document.getElementById('resultMessage');
+
+        if (type === 'success') {
+          icon.textContent = '✓';
+          icon.style.color = '#28a745';
+          titleEl.textContent = title;
+          titleEl.style.color = '#155724';
+        } else if (type === 'error') {
+          icon.textContent = '✗';
+          icon.style.color = '#FF3B3B';
+          titleEl.textContent = title;
+          titleEl.style.color = '#721c24';
         } else {
-          let icon = '✓';
-          if (type === 'error') icon = '✕';
-          if (type === 'info') icon = 'ℹ️';
-          
-          resultDisplay.innerHTML = '<div><div class="result-icon">' + icon + '</div><div class="result-text">' + text + '</div><div class="result-subtext">' + subtext + '</div></div>';
+          icon.innerHTML = '<div class="spinner"></div>';
+          titleEl.textContent = title;
+          titleEl.style.color = '#151556';
         }
 
-        if (type !== 'loading') {
-          setTimeout(() => {
-            resultDisplay.className = 'result-display';
-            resultDisplay.innerHTML = '<div><div class="result-text">Ready to scan</div><div class="result-subtext">Tap the button to scan next code</div></div>';
-          }, 3000);
-        }
+        messageEl.textContent = message;
+        resultDisplay.style.display = 'block';
+        scannerContainer.style.display = 'none';
       }
 
-      // History
+      document.getElementById('continueBtn').addEventListener('click', () => {
+        resultDisplay.style.display = 'none';
+        scannerContainer.style.display = 'block';
+        if (html5QrCode) {
+          html5QrCode.resume();
+        }
+      });
+
       function addToHistory(name, action) {
         const actionText = action === 'checkin' ? 'Checked In' : 'Served';
-        const timeText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        
-        scanHistory.unshift({ name: name, action: actionText, time: timeText });
-        if (scanHistory.length > 10) scanHistory.pop();
-        
-        updateHistoryDisplay();
+        activityHistory.unshift({ name, action: actionText });
+        if (activityHistory.length > 20) activityHistory.pop();
+        updateActivityDisplay();
       }
 
-      function updateHistoryDisplay() {
-        if (scanHistory.length === 0) {
-          historyList.innerHTML = '<div style="color: #6c757d; text-align: center; padding: 20px; font-size: 14px;">No scans yet</div>';
-          return;
-        }
-
-        historyList.innerHTML = scanHistory.map(item => 
-          '<div class="history-item"><div><div class="history-name">' + item.name + '</div><div class="history-action">' + item.action + '</div></div><div class="history-time">' + item.time + '</div></div>'
-        ).join('');
-      }
-
-      // Session Persistence
-      function saveSessionData() {
-        sessionStorage.setItem('scannerSession', JSON.stringify({
-          checkInCount: checkInCount,
-          serveCount: serveCount,
-          scanHistory: scanHistory,
-          currentMode: currentMode
-        }));
-      }
-
-      function loadSessionData() {
-        const saved = sessionStorage.getItem('scannerSession');
-        if (saved) {
-          const data = JSON.parse(saved);
-          checkInCount = data.checkInCount || 0;
-          serveCount = data.serveCount || 0;
-          scanHistory = data.scanHistory || [];
-          currentMode = data.currentMode || 'checkin';
-          
-          checkInCountEl.textContent = checkInCount;
-          servedCountEl.textContent = serveCount;
-          checkInCountEl2.textContent = checkInCount;
-          servedCountEl2.textContent = serveCount;
-          setMode(currentMode);
-          updateHistoryDisplay();
+      function updateActivityDisplay() {
+        if (activityHistory.length === 0) {
+          activityList.innerHTML = '<div style="text-align: center; padding: 24px; color: #6c757d;">No activity yet</div>';
+        } else {
+          activityList.innerHTML = activityHistory.map(item => `
+            <div class="activity-item">
+              <div class="activity-name">${item.name}</div>
+              <div class="activity-action">${item.action}</div>
+            </div>
+          `).join('');
         }
       }
 
-      // Logout
-      logoutBtn.addEventListener('click', logout);
-
-      function logout() {
-        authenticated = false;
-        clearTimeout(idleTimer);
-        clearTimeout(warningTimer);
-        clearInterval(sessionTimeInterval);
-        closeVideoScanner();
-        
-        scannerScreen.classList.remove('active');
-        pinScreen.style.display = 'flex';
-        pinInput.value = '';
-        pinError.style.display = 'none';
-        timeoutWarning.classList.remove('active');
-        
-        // Reset to scanner mode
-        setInterfaceMode('scanner');
-      }
-
-      // Activity Tracking
-      document.addEventListener('click', resetIdleTimer);
-      document.addEventListener('touchstart', resetIdleTimer);
+      // Auto-focus PIN input
+      pinInput.focus();
     </script>
   </body>
 </html>
