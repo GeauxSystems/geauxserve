@@ -396,6 +396,191 @@
         color: #721c24;
       }
 
+      /* SMS Opt-In Section */
+      .optin-section {
+        background: #f8f9fa;
+        border: 2px solid #00BDFF;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 20px 0;
+      }
+
+      .optin-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .optin-icon {
+        font-size: 28px;
+      }
+
+      .optin-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #151556;
+      }
+
+      .optin-phone {
+        background: white;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .optin-phone-number {
+        font-weight: 600;
+        color: #151556;
+      }
+
+      .optin-phone-link {
+        color: #00BDFF;
+        font-size: 13px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .optin-phone-link:hover {
+        text-decoration: underline;
+      }
+
+      .optin-consent {
+        font-size: 12px;
+        color: #6c757d;
+        margin-bottom: 16px;
+        line-height: 1.5;
+      }
+
+      .optin-buttons {
+        display: flex;
+        gap: 12px;
+      }
+
+      .btn-optin {
+        flex: 1;
+        padding: 14px;
+        font-size: 15px;
+        font-weight: 600;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.2s;
+        background: #28a745;
+        color: white;
+      }
+
+      .btn-optin:hover {
+        background: #218838;
+      }
+
+      .btn-skip {
+        flex: 1;
+        padding: 14px;
+        font-size: 15px;
+        font-weight: 600;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.2s;
+        background: white;
+        color: #6c757d;
+      }
+
+      .btn-skip:hover {
+        background: #f8f9fa;
+      }
+
+      /* Phone Update Modal */
+      .phone-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        padding: 20px;
+      }
+
+      .phone-modal.active {
+        display: flex;
+      }
+
+      .phone-modal-content {
+        background: white;
+        border-radius: 16px;
+        padding: 32px;
+        max-width: 400px;
+        width: 100%;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      }
+
+      .phone-modal-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #151556;
+        margin-bottom: 8px;
+      }
+
+      .phone-modal-subtitle {
+        font-size: 14px;
+        color: #6c757d;
+        margin-bottom: 24px;
+      }
+
+      .phone-modal-input {
+        width: 100%;
+        padding: 14px;
+        font-size: 16px;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        margin-bottom: 20px;
+      }
+
+      .phone-modal-input:focus {
+        outline: none;
+        border-color: #00BDFF;
+      }
+
+      .phone-modal-buttons {
+        display: flex;
+        gap: 12px;
+      }
+
+      .btn-modal-cancel {
+        flex: 1;
+        padding: 14px;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        background: white;
+        color: #6c757d;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+      }
+
+      .btn-modal-save {
+        flex: 1;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        background: #00BDFF;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+      }
+
       .action-buttons {
         display: flex;
         gap: 12px;
@@ -871,6 +1056,19 @@
       </div>
     </div>
 
+    <!-- Phone Update Modal -->
+    <div class="phone-modal" id="phoneModal">
+      <div class="phone-modal-content">
+        <div class="phone-modal-title">Update Phone Number</div>
+        <div class="phone-modal-subtitle">Enter the correct phone number</div>
+        <input type="tel" class="phone-modal-input" id="phoneModalInput" placeholder="(555) 123-4567" />
+        <div class="phone-modal-buttons">
+          <button class="btn-modal-cancel" id="phoneModalCancel">Cancel</button>
+          <button class="btn-modal-save" id="phoneModalSave">Save & Send Card</button>
+        </div>
+      </div>
+    </div>
+
     <!-- jsQR Library -->
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 
@@ -920,6 +1118,12 @@
       const resultDisplay = document.getElementById('resultDisplay');
       const historyList = document.getElementById('historyList');
       const logoutBtn = document.getElementById('logoutBtn');
+
+      // Phone modal elements
+      const phoneModal = document.getElementById('phoneModal');
+      const phoneModalInput = document.getElementById('phoneModalInput');
+      const phoneModalCancel = document.getElementById('phoneModalCancel');
+      const phoneModalSave = document.getElementById('phoneModalSave');
 
       // State
       let authenticated = false;
@@ -1225,6 +1429,7 @@
         let message = '';
         let canCheckIn = false;
         let canServe = false;
+        let showOptIn = false;
 
         // Determine eligibility
         if (data.status === 'Pending') {
@@ -1243,6 +1448,7 @@
           statusBadge = '<span class="status-badge status-warning">Checked In</span>';
           message = '<div class="warning-message">Already checked in today. Ready to be served.</div>';
           canServe = true;
+          showOptIn = true; // Show opt-in when they check in
         } else if (data.alreadyServed) {
           statusBadge = '<span class="status-badge status-warning">Already Served</span>';
           message = '<div class="warning-message">Already served this month.</div>';
@@ -1250,6 +1456,31 @@
           statusBadge = '<span class="status-badge status-eligible">✓ Eligible</span>';
           canCheckIn = true;
           canServe = true;
+          showOptIn = true; // Show opt-in for eligible households
+        }
+
+        // Build SMS opt-in section HTML
+        let optInSection = '';
+        if (showOptIn && data.phone) {
+          optInSection = `
+            <div class="optin-section">
+              <div class="optin-header">
+                <div class="optin-icon">📱</div>
+                <div class="optin-title">Digital Card Opt-In</div>
+              </div>
+              <div class="optin-phone">
+                <span class="optin-phone-number">${data.phone}</span>
+                <a href="#" class="optin-phone-link" onclick="showPhoneModal(event)">Wrong number?</a>
+              </div>
+              <div class="optin-consent">
+                By clicking "Yes, Text Me", this person consents to receive their digital food pantry card via SMS. Message & data rates may apply. Reply STOP to opt out.
+              </div>
+              <div class="optin-buttons">
+                <button class="btn-optin" onclick="sendOptInSMS(event)">✓ Yes, Text Me My Card</button>
+                <button class="btn-skip" onclick="skipOptIn(event)">Skip</button>
+              </div>
+            </div>
+          `;
         }
 
         householdCard.innerHTML = `
@@ -1282,6 +1513,8 @@
               <span class="info-value">${data.expirationDate || 'N/A'}</span>
             </div>
           </div>
+
+          ${optInSection}
           
           <div class="action-buttons">
             <button class="btn-action btn-checkin" id="manualCheckInBtn" ${canCheckIn ? '' : 'disabled'}>
@@ -1303,6 +1536,84 @@
           document.getElementById('manualServeBtn').addEventListener('click', () => {
             processCheckIn(selectedHousehold.contactId, selectedHousehold.token, 'serve');
           });
+        }
+      }
+
+      // SMS Opt-In Functions
+      function showPhoneModal(event) {
+        event.preventDefault();
+        phoneModal.classList.add('active');
+        phoneModalInput.value = selectedHousehold.data.phone || '';
+        phoneModalInput.focus();
+      }
+
+      function hidePhoneModal() {
+        phoneModal.classList.remove('active');
+        phoneModalInput.value = '';
+      }
+
+      phoneModalCancel.addEventListener('click', hidePhoneModal);
+
+      phoneModalSave.addEventListener('click', async () => {
+        const newPhone = phoneModalInput.value.trim();
+        if (!newPhone) {
+          alert('Please enter a phone number');
+          return;
+        }
+        
+        hidePhoneModal();
+        await handleOptIn(newPhone);
+      });
+
+      async function sendOptInSMS(event) {
+        event.preventDefault();
+        await handleOptIn(null); // Use existing phone number
+      }
+
+      function skipOptIn(event) {
+        event.preventDefault();
+        // Just hide the opt-in section
+        const optinSection = document.querySelector('.optin-section');
+        if (optinSection) {
+          optinSection.style.display = 'none';
+        }
+      }
+
+      async function handleOptIn(phoneNumber) {
+        // Show loading
+        householdCard.innerHTML = '<div style="text-align: center; padding: 32px;"><div class="spinner"></div><div style="margin-top: 16px;">Sending digital card...</div></div>';
+        
+        try {
+          let url = `${API_URL}?action=optInAndSendCard&contactId=${selectedHousehold.contactId}`;
+          if (phoneNumber) {
+            url += `&phone=${encodeURIComponent(phoneNumber)}`;
+          }
+          
+          const response = await fetch(url);
+          const data = await response.json();
+          
+          if (data.success) {
+            householdCard.innerHTML = `
+              <div style="text-align: center; padding: 32px; background: #d4edda; border-radius: 12px;">
+                <div style="font-size: 48px; margin-bottom: 16px;">✓</div>
+                <div style="font-size: 20px; font-weight: 600; color: #155724; margin-bottom: 8px;">Digital Card Sent!</div>
+                <div style="color: #155724; margin-bottom: 16px;">${data.message}</div>
+                <button class="btn btn-primary" onclick="householdCard.classList.remove('active'); searchInput.value = ''; searchInput.focus();">Done</button>
+              </div>
+            `;
+          } else {
+            householdCard.innerHTML = `
+              <div class="error-message">
+                <strong>Failed to send card</strong><br>${data.message || 'Please try again'}
+              </div>
+              <button class="btn btn-primary" style="margin-top: 16px;" onclick="selectHousehold('${selectedHousehold.contactId}', '${selectedHousehold.token}')">Back</button>
+            `;
+          }
+        } catch (err) {
+          householdCard.innerHTML = `
+            <div class="error-message">Connection error. Please try again.</div>
+            <button class="btn btn-primary" style="margin-top: 16px;" onclick="selectHousehold('${selectedHousehold.contactId}', '${selectedHousehold.token}')">Back</button>
+          `;
         }
       }
 
