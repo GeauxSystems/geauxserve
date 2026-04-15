@@ -697,6 +697,16 @@
         100% { transform: rotate(360deg); }
       }
 
+      /* Error Pulse Animation */
+      @keyframes errorPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+
+      .error-pulse {
+        animation: errorPulse 0.5s ease-in-out 3;
+      }
+
       /* Responsive */
       @media (max-width: 768px) {
         .stats-grid {
@@ -1349,15 +1359,31 @@
           icon.style.color = '#28a745';
           titleEl.textContent = title;
           titleEl.style.color = '#155724';
+          resultDisplay.style.background = 'white';
+          messageEl.style.color = '#6c757d';
+          resultDisplay.classList.remove('error-pulse');
         } else if (type === 'error') {
           icon.textContent = '✗';
           icon.style.color = '#FF3B3B';
           titleEl.textContent = title;
           titleEl.style.color = '#721c24';
+          resultDisplay.style.background = '#f8d7da';
+          messageEl.style.color = '#721c24';
+          
+          // Make error impossible to miss
+          resultDisplay.classList.add('error-pulse');
+          
+          // Vibrate phone if supported (mobile only)
+          if (navigator.vibrate) {
+            navigator.vibrate([200, 100, 200]);
+          }
         } else {
           icon.innerHTML = '<div class="spinner"></div>';
           titleEl.textContent = title;
           titleEl.style.color = '#151556';
+          resultDisplay.style.background = 'white';
+          messageEl.style.color = '#6c757d';
+          resultDisplay.classList.remove('error-pulse');
         }
 
         messageEl.textContent = message;
