@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Authorized Representative - Little Zion Food Pantry</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #151556 0%, #1a1a6e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #151556 0%, #00BDFF 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+
+        .form-content {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #151556;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #00BDFF;
+            box-shadow: 0 0 0 3px rgba(0, 189, 255, 0.1);
+        }
+
+        .form-group input:disabled {
+            background: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 6px;
+            color: #6c757d;
+            font-size: 13px;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #00BDFF;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #151556;
+            line-height: 1.6;
+        }
+
+        .household-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: none;
+        }
+
+        .household-info.show {
+            display: block;
+        }
+
+        .household-info h3 {
+            color: #151556;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .household-info p {
+            color: #6c757d;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #151556;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #00BDFF;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 189, 255, 0.3);
+        }
+
+        .btn-success {
+            background: #7DCE3B;
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #151556;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-screen {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-screen.show {
+            display: block;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #7DCE3B;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .success-icon::after {
+            content: "✓";
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .success-screen h2 {
+            color: #151556;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .success-screen p {
+            color: #6c757d;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content h3 {
+            color: #151556;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            color: #6c757d;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .modal-content ul {
+            margin: 15px 0 20px 20px;
+            color: #6c757d;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .modal-buttons .btn {
+            flex: 1;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #5a6268;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                border-radius: 0;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .form-content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Update Authorized Representative</h1>
+            <p>Little Zion Food Pantry</p>
+        </div>
+
+        <div class="form-content">
+            <!-- Form Section -->
+            <div id="formSection">
+                <div class="info-box">
+                    If you cannot pick up your household's food, you can authorize someone else to pick it up on your behalf. Enter your information below.
+                </div>
+
+                <div class="error-message" id="errorMessage"></div>
+
+                <form id="repForm" onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="phone">Your Phone Number *</label>
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            placeholder="Phone number on file with Little Zion" 
+                            required
+                        />
+                        <small>This is the phone number you provided in your application</small>
+                    </div>
+
+                    <div class="household-info" id="householdInfo">
+                        <h3>Household Found</h3>
+                        <p><strong>Name:</strong> <span id="householdName">-</span></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="repName">Authorized Person's Name *</label>
+                        <input 
+                            type="text" 
+                            id="repName" 
+                            placeholder="Full legal name (First and Last)" 
+                            required
+                            disabled
+                        />
+                        <small>This person will need to show photo ID when picking up food</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Your Email (Optional)</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            placeholder="Email for confirmation"
+                            disabled
+                        />
+                        <small>We'll send a confirmation to this email if provided</small>
+                    </div>
+
+                    <button type="button" class="btn btn-primary" id="submitBtn" onclick="submitForm()" disabled>
+                        Update Authorized Person
+                    </button>
+                </form>
+            </div>
+
+            <!-- Success Section -->
+            <div class="success-screen" id="successScreen">
+                <div class="success-icon"></div>
+                <h2>Update Complete</h2>
+                <p><strong id="successName">-</strong> is now authorized to pick up food for your household.</p>
+                <p style="margin-top: 20px;">They will need to bring a valid photo ID when picking up food.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <h3>Confirm Authorized Representative</h3>
+            <p><strong>Authorized Person:</strong> <span id="confirmName">-</span></p>
+            <p style="margin-top: 15px;">This person will be allowed to pick up food on behalf of your household.</p>
+            
+            <p style="margin-top: 20px; font-weight: 600;">They MUST bring:</p>
+            <ul>
+                <li>Valid photo ID (Driver's License, State ID, Passport, etc.)</li>
+                <li>Your household's digital card or QR code</li>
+            </ul>
+
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-success" id="confirmBtn" onclick="confirmSubmit()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // UPDATE THIS WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
+        const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+
+        let currentPhone = '';
+        let isPhoneValid = false;
+
+        // Auto-format and validate phone number
+        document.getElementById('phone').addEventListener('input', async (e) => {
+            const input = e.target;
+            let value = input.value.replace(/\D/g, '');
+            
+            // Limit to 10 digits
+            if (value.length > 10) {
+                value = value.slice(0, 10);
+            }
+            
+            // Format as (XXX) XXX-XXXX
+            if (value.length >= 6) {
+                input.value = `(${value.slice(0,3)}) ${value.slice(3,6)}-${value.slice(6)}`;
+            } else if (value.length >= 3) {
+                input.value = `(${value.slice(0,3)}) ${value.slice(3)}`;
+            } else {
+                input.value = value;
+            }
+
+            // Validate phone if 10 digits entered
+            if (value.length === 10) {
+                await validatePhone(value);
+            } else {
+                // Reset if incomplete
+                isPhoneValid = false;
+                document.getElementById('householdInfo').classList.remove('show');
+                document.getElementById('repName').disabled = true;
+                document.getElementById('email').disabled = true;
+                document.getElementById('submitBtn').disabled = true;
+            }
+        });
+
+        async function validatePhone(phone) {
+            const errorEl = document.getElementById('errorMessage');
+            const householdInfoEl = document.getElementById('householdInfo');
+            const repNameInput = document.getElementById('repName');
+            const emailInput = document.getElementById('email');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Clear previous state
+            errorEl.classList.remove('show');
+            householdInfoEl.classList.remove('show');
+            repNameInput.disabled = true;
+            emailInput.disabled = true;
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `action=validatePhone&phone=${encodeURIComponent(phone)}`
+                });
+
+                const result = await response.json();
+
+                if (result.valid) {
+                    // Phone found and approved
+                    currentPhone = phone;
+                    isPhoneValid = true;
+                    
+                    document.getElementById('householdName').textContent = result.householdName;
+                    householdInfoEl.classList.add('show');
+                    
+                    // Enable form fields
+                    repNameInput.disabled = false;
+                    emailInput.disabled = false;
+                    submitBtn.disabled = false;
+
+                    // Focus on rep name
+                    repNameInput.focus();
+                } else {
+                    // Phone not found or not approved
+                    showError(result.message || 'Phone number not found or application not approved');
+                    isPhoneValid = false;
+                }
+            } catch (error) {
+                showError('Connection error. Please check your internet and try again.');
+                isPhoneValid = false;
+            }
+        }
+
+        function submitForm() {
+            const repName = document.getElementById('repName').value.trim();
+            
+            if (!isPhoneValid) {
+                showError('Please enter a valid phone number on file with Little Zion');
+                return;
+            }
+
+            if (!repName) {
+                showError('Please enter the authorized person\'s full legal name');
+                return;
+            }
+
+            // Show confirmation modal
+            document.getElementById('confirmName').textContent = repName;
+            document.getElementById('confirmModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('confirmModal').classList.remove('show');
+        }
+
+        async function confirmSubmit() {
+            const repName = document.getElementById('repName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const confirmBtn = document.getElementById('confirmBtn');
+            const errorEl = document.getElementById('errorMessage');
+
+            // Disable button and show loading
+            confirmBtn.disabled = true;
+            confirmBtn.innerHTML = '<span class="spinner"></span>Updating...';
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `action=updateContact&phone=${encodeURIComponent(currentPhone)}&repName=${encodeURIComponent(repName)}&email=${encodeURIComponent(email)}`
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Close modal
+                    closeModal();
+
+                    // Show success screen
+                    document.getElementById('successName').textContent = repName;
+                    document.getElementById('formSection').style.display = 'none';
+                    document.getElementById('successScreen').classList.add('show');
+                } else {
+                    showError(result.message || 'Update failed. Please try again.');
+                    closeModal();
+                    confirmBtn.disabled = false;
+                    confirmBtn.textContent = 'Confirm';
+                }
+            } catch (error) {
+                showError('Connection error. Please try again.');
+                closeModal();
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = 'Confirm';
+            }
+        }
+
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                errorEl.classList.remove('show');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
