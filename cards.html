@@ -91,6 +91,12 @@
       color: #151556;
       font-size: 22px;
       font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .content-card .subtitle {
+      color: #6c757d;
+      font-size: 14px;
       margin-bottom: 25px;
     }
 
@@ -276,6 +282,51 @@
       letter-spacing: 0.5px;
     }
 
+    /* Search Results */
+    .search-results {
+      display: none;
+      margin-top: 25px;
+    }
+
+    .search-results.show {
+      display: block;
+    }
+
+    .search-results h3 {
+      color: #151556;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .result-item {
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+
+    .result-item:hover {
+      background: white;
+      border-color: #00BDFF;
+      transform: translateX(4px);
+    }
+
+    .result-item .name {
+      color: #151556;
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .result-item .details {
+      color: #6c757d;
+      font-size: 13px;
+    }
+
     /* Print Card Display */
     .single-card-result {
       display: none;
@@ -407,13 +458,17 @@
       }
 
       .header-bar,
-      .container > *:not(.single-card-result):not(.bulk-cards-grid),
       .tab-nav,
       .card-actions,
       .back-link,
       .info-box,
       .stats-grid,
-      .btn {
+      .btn,
+      .search-results,
+      .content-card h2,
+      .content-card .subtitle,
+      .form-group,
+      .error-message {
         display: none !important;
       }
 
@@ -485,25 +540,32 @@
     <!-- Single Card Tab -->
     <div id="singleTab" class="tab-content active">
       <div class="content-card">
-        <h2>Search for Household</h2>
+        <h2>Search Household</h2>
+        <p class="subtitle">Search by name, phone, or address</p>
 
         <div class="error-message" id="singleError"></div>
 
         <div class="form-group">
-          <label>Phone Number</label>
           <div class="search-input-group">
             <input 
-              type="tel" 
-              id="phoneSearch" 
-              placeholder="Phone number on file with Little Zion"
-              onkeypress="if(event.key==='Enter') lookupCard()"
+              type="text" 
+              id="searchQuery" 
+              placeholder="Enter name, phone, or address"
+              onkeypress="if(event.key==='Enter') searchHousehold()"
             />
-            <button class="btn btn-primary" onclick="lookupCard()" id="searchBtn">
+            <button class="btn btn-primary" onclick="searchHousehold()" id="searchBtn">
               Search
             </button>
           </div>
         </div>
 
+        <!-- Search Results -->
+        <div class="search-results" id="searchResults">
+          <h3>Search Results</h3>
+          <div id="resultsList"></div>
+        </div>
+
+        <!-- Selected Card Display -->
         <div class="single-card-result" id="cardResult">
           <div class="print-card" id="printableCard">
             <div class="print-card-header">
@@ -576,6 +638,7 @@
     const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
 
     let allCards = [];
+    let searchResults = [];
 
     function switchTab(tab) {
       // Update tabs
@@ -591,28 +654,16 @@
       }
     }
 
-    // Auto-format phone
-    document.getElementById('phoneSearch').addEventListener('input', (e) => {
-      let value = e.target.value.replace(/\D/g, '');
-      if (value.length > 10) value = value.slice(0, 10);
-      
-      if (value.length >= 6) {
-        e.target.value = `(${value.slice(0,3)}) ${value.slice(3,6)}-${value.slice(6)}`;
-      } else if (value.length >= 3) {
-        e.target.value = `(${value.slice(0,3)}) ${value.slice(3)}`;
-      } else {
-        e.target.value = value;
-      }
-    });
-
-    async function lookupCard() {
-      const phone = document.getElementById('phoneSearch').value.trim();
+    async function searchHousehold() {
+      const query = document.getElementById('searchQuery').value.trim();
       const errorEl = document.getElementById('singleError');
-      const resultEl = document.getElementById('cardResult');
+      const resultsEl = document.getElementById('searchResults');
+      const resultsList = document.getElementById('resultsList');
+      const cardResultEl = document.getElementById('cardResult');
       const searchBtn = document.getElementById('searchBtn');
       
-      if (!phone) {
-        showError(errorEl, 'Please enter a phone number');
+      if (!query) {
+        showError(errorEl, 'Please enter a search term');
         return;
       }
 
@@ -620,10 +671,54 @@
       searchBtn.disabled = true;
       searchBtn.innerHTML = '<span class="spinner"></span>Searching...';
       errorEl.classList.remove('show');
-      resultEl.classList.remove('show');
+      resultsEl.classList.remove('show');
+      cardResultEl.classList.remove('show');
 
       try {
-        const url = `${SCRIPT_URL}?action=cardLookup&phone=${encodeURIComponent(phone)}`;
+        const url = `${SCRIPT_URL}?action=search&query=${encodeURIComponent(query)}`;
+        const response = await fetch(url);
+        const result = await response.json();
+
+        if (result.success && result.results && result.results.length > 0) {
+          searchResults = result.results;
+          
+          // Display results
+          let html = '';
+          result.results.forEach((item, index) => {
+            html += `
+              <div class="result-item" onclick="selectHousehold(${index})">
+                <div class="name">${item.name}</div>
+                <div class="details">${item.phone} • ${item.address}</div>
+              </div>
+            `;
+          });
+          
+          resultsList.innerHTML = html;
+          resultsEl.classList.add('show');
+        } else {
+          showError(errorEl, 'No households found. Try searching by name, phone, or address.');
+        }
+      } catch (error) {
+        showError(errorEl, 'Network error. Please try again.');
+      } finally {
+        searchBtn.disabled = false;
+        searchBtn.innerHTML = 'Search';
+      }
+    }
+
+    async function selectHousehold(index) {
+      const household = searchResults[index];
+      const errorEl = document.getElementById('singleError');
+      const resultsEl = document.getElementById('searchResults');
+      const cardResultEl = document.getElementById('cardResult');
+
+      // Hide results, show loading
+      resultsEl.classList.remove('show');
+      errorEl.classList.remove('show');
+
+      try {
+        // Get full card data using the contact ID and token
+        const url = `${SCRIPT_URL}?action=cardLookup&phone=${encodeURIComponent(household.phone)}`;
         const response = await fetch(url);
         const result = await response.json();
 
@@ -634,23 +729,22 @@
           document.getElementById('cardPhone').textContent = result.contact.phone;
           document.getElementById('cardQR').src = result.contact.qrCode;
           
-          resultEl.classList.add('show');
+          cardResultEl.classList.add('show');
         } else {
           showError(errorEl, result.message);
         }
       } catch (error) {
-        showError(errorEl, 'Network error. Please try again.');
-      } finally {
-        searchBtn.disabled = false;
-        searchBtn.innerHTML = 'Search';
+        showError(errorEl, 'Failed to load card. Please try again.');
       }
     }
 
     function resetSearch() {
-      document.getElementById('phoneSearch').value = '';
+      document.getElementById('searchQuery').value = '';
+      document.getElementById('searchResults').classList.remove('show');
       document.getElementById('cardResult').classList.remove('show');
       document.getElementById('singleError').classList.remove('show');
-      document.getElementById('phoneSearch').focus();
+      document.getElementById('searchQuery').focus();
+      searchResults = [];
     }
 
     function printSingleCard() {
