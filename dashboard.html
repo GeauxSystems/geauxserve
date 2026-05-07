@@ -899,7 +899,7 @@
       document.getElementById('resetModal').style.display = 'none';
     }
 
-    async function handleResetConfirm() {
+  async function handleResetConfirm() {
   const pin = document.getElementById('resetPinInput').value;
   const pinError = document.getElementById('resetPinError');
   const confirmBtn = document.getElementById('resetConfirmBtn');
@@ -922,13 +922,23 @@
       confirmBtn.textContent = '✓ Reset Complete';
       confirmBtn.style.background = '#28a745';
       
-      // Hide modal
+      // Wait for GHL to propagate changes (3 seconds)
       setTimeout(() => {
         hideResetModal();
         
-        // Force fresh data load (no page reload)
-        loadDashboardData();
-      }, 800);
+        // Show loading state
+        document.getElementById('mainContent').style.display = 'none';
+        document.getElementById('loadingState').style.display = 'block';
+        document.getElementById('loadingState').innerHTML = `
+          <div class="loading-spinner"></div>
+          <p>Refreshing dashboard data...</p>
+        `;
+        
+        // Wait another 2 seconds, then reload fresh data
+        setTimeout(() => {
+          loadDashboardData();
+        }, 2000);
+      }, 1000);
     } else {
       // Show error
       pinError.textContent = data.message || 'Invalid PIN. Please try again.';
