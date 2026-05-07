@@ -900,51 +900,54 @@
     }
 
     async function handleResetConfirm() {
-      const pin = document.getElementById('resetPinInput').value;
-      const pinError = document.getElementById('resetPinError');
-      const confirmBtn = document.getElementById('resetConfirmBtn');
+  const pin = document.getElementById('resetPinInput').value;
+  const pinError = document.getElementById('resetPinError');
+  const confirmBtn = document.getElementById('resetConfirmBtn');
+  
+  if (!pin || pin.length !== 4) {
+    pinError.style.display = 'block';
+    return;
+  }
+  
+  // Disable button during API call
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = 'Resetting...';
+  
+  try {
+    const response = await fetch(`${API_URL}?action=resetDashboard&pin=${pin}`);
+    const data = await response.json();
+    
+    if (data.success) {
+      // Show success message
+      confirmBtn.textContent = '✓ Reset Complete';
+      confirmBtn.style.background = '#28a745';
       
-      if (!pin || pin.length !== 4) {
-        pinError.style.display = 'block';
-        return;
-      }
-      
-      // Disable button during API call
-      confirmBtn.disabled = true;
-      confirmBtn.textContent = 'Resetting...';
-      
-      try {
-        const response = await fetch(`${API_URL}?action=resetDashboard&pin=${pin}`);
-        const data = await response.json();
+      // Hide modal
+      setTimeout(() => {
+        hideResetModal();
         
-        if (data.success) {
-          // Show success message briefly
-          confirmBtn.textContent = '✓ Reset Complete';
-          confirmBtn.style.background = '#28a745';
-          
-          // Reload page after brief delay
-          setTimeout(() => {
-            location.reload();
-          }, 1000);
-        } else {
-          // Show error
-          pinError.textContent = data.message || 'Invalid PIN. Please try again.';
-          pinError.style.display = 'block';
-          confirmBtn.disabled = false;
-          confirmBtn.textContent = 'Reset Distribution';
-          
-          // Clear PIN input
-          document.getElementById('resetPinInput').value = '';
-          document.getElementById('resetPinInput').focus();
-        }
-      } catch (error) {
-        console.error('Reset error:', error);
-        pinError.textContent = 'Network error. Please try again.';
-        pinError.style.display = 'block';
-        confirmBtn.disabled = false;
-        confirmBtn.textContent = 'Reset Distribution';
-      }
+        // Force fresh data load (no page reload)
+        loadDashboardData();
+      }, 800);
+    } else {
+      // Show error
+      pinError.textContent = data.message || 'Invalid PIN. Please try again.';
+      pinError.style.display = 'block';
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = 'Reset Distribution';
+      
+      // Clear PIN input
+      document.getElementById('resetPinInput').value = '';
+      document.getElementById('resetPinInput').focus();
     }
+  } catch (error) {
+    console.error('Reset error:', error);
+    pinError.textContent = 'Network error. Please try again.';
+    pinError.style.display = 'block';
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = 'Reset Distribution';
+  }
+}
 
     // Start the dashboard
     init();
