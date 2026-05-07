@@ -918,45 +918,41 @@
     const data = await response.json();
     
     if (data.success) {
-      // Show success message
-      confirmBtn.textContent = '✓ Reset Complete';
-      confirmBtn.style.background = '#28a745';
-      
-      // Wait for GHL to propagate changes (3 seconds)
-      setTimeout(() => {
-        hideResetModal();
-        
-        // Show loading state
-        document.getElementById('mainContent').style.display = 'none';
-        document.getElementById('loadingState').style.display = 'block';
-        document.getElementById('loadingState').innerHTML = `
-          <div class="loading-spinner"></div>
-          <p>Refreshing dashboard data...</p>
-        `;
-        
-        // Wait another 2 seconds, then reload fresh data
-        setTimeout(() => {
-          loadDashboardData();
-        }, 2000);
-      }, 1000);
-    } else {
-      // Show error
-      pinError.textContent = data.message || 'Invalid PIN. Please try again.';
-      pinError.style.display = 'block';
-      confirmBtn.disabled = false;
-      confirmBtn.textContent = 'Reset Distribution';
-      
-      // Clear PIN input
-      document.getElementById('resetPinInput').value = '';
-      document.getElementById('resetPinInput').focus();
-    }
-  } catch (error) {
-    console.error('Reset error:', error);
-    pinError.textContent = 'Network error. Please try again.';
-    pinError.style.display = 'block';
-    confirmBtn.disabled = false;
-    confirmBtn.textContent = 'Reset Distribution';
-  }
+  // Show what actually happened
+  const message = `Reset complete!\n\nProcessed: ${data.processed || 0} contacts\nErrors: ${data.errors || 0}`;
+  alert(message);
+  
+  // Show success message
+  confirmBtn.textContent = '✓ Reset Complete';
+  confirmBtn.style.background = '#28a745';
+  
+  // Wait for GHL to propagate changes (3 seconds)
+  setTimeout(() => {
+    hideResetModal();
+    
+    // Show loading state
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('loadingState').style.display = 'block';
+    document.getElementById('loadingState').innerHTML = `
+      <div class="loading-spinner"></div>
+      <p>Refreshing dashboard data...</p>
+    `;
+    
+    // Wait another 2 seconds, then reload fresh data
+    setTimeout(() => {
+      loadDashboardData();
+    }, 2000);
+  }, 1000);
+} else {
+  // Show error
+  pinError.textContent = data.message || 'Invalid PIN. Please try again.';
+  pinError.style.display = 'block';
+  confirmBtn.disabled = false;
+  confirmBtn.textContent = 'Reset Distribution';
+  
+  // Clear PIN input
+  document.getElementById('resetPinInput').value = '';
+  document.getElementById('resetPinInput').focus();
 }
 
     // Start the dashboard
