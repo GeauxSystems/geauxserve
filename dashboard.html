@@ -1,706 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Distribution Dashboard - Little Zion</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #f8f9fa;
-      padding: 20px;
-      min-height: 100vh;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    /* Header */
-    .header {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-      text-align: center;
-      transition: background 0.3s;
-      position: relative;
-    }
-
-    .header.live {
-      background: #7DCE3B;
-    }
-
-    .header.live h1,
-    .header.live p {
-      color: white;
-    }
-
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #151556;
-      color: white;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .status-badge.live {
-      background: #7DCE3B;
-    }
-
-    .status-badge.complete {
-      background: #7DCE3B;
-    }
-
-    .live-indicator {
-      width: 8px;
-      height: 8px;
-      background: white;
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    .header h1 {
-      font-size: 24px;
-      color: #151556;
-      margin-bottom: 4px;
-    }
-
-    .header p {
-      color: #6c757d;
-      font-size: 14px;
-    }
-
-    /* Reset Button */
-    .reset-button {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      padding: 8px 16px;
-      background: transparent;
-      color: rgba(21, 21, 86, 0.7);
-      border: 1px solid rgba(21, 21, 86, 0.3);
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .header.live .reset-button {
-      color: rgba(255, 255, 255, 0.8);
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .reset-button:hover {
-      background: rgba(21, 21, 86, 0.1);
-      color: #151556;
-      border-color: rgba(21, 21, 86, 0.5);
-    }
-
-    .header.live .reset-button:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
-      border-color: rgba(255, 255, 255, 0.5);
-    }
-
-    /* Reset Modal */
-    .reset-modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-      animation: fadeIn 0.2s;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .reset-modal {
-      background: white;
-      border-radius: 16px;
-      padding: 32px;
-      max-width: 450px;
-      width: 90%;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-      animation: slideUp 0.3s;
-    }
-
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    .reset-modal-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .reset-modal-icon {
-      font-size: 32px;
-    }
-
-    .reset-modal-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: #151556;
-    }
-
-    .reset-modal-warning {
-      background: #fff3cd;
-      border-left: 4px solid #ffc107;
-      padding: 16px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-
-    .reset-modal-warning-title {
-      font-weight: 700;
-      color: #856404;
-      margin-bottom: 8px;
-    }
-
-    .reset-modal-stats {
-      list-style: none;
-      padding-left: 0;
-      margin: 12px 0;
-    }
-
-    .reset-modal-stats li {
-      padding: 6px 0;
-      color: #856404;
-      font-size: 14px;
-    }
-
-    .reset-modal-stats li strong {
-      font-weight: 700;
-    }
-
-    .reset-modal-archive {
-      background: #d4edda;
-      border-left: 4px solid #28a745;
-      padding: 14px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      font-size: 14px;
-      color: #155724;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .reset-modal-pin {
-      margin-bottom: 20px;
-    }
-
-    .reset-modal-pin label {
-      display: block;
-      font-weight: 600;
-      color: #151556;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-
-    .reset-modal-pin-input {
-      width: 100%;
-      padding: 14px 16px;
-      font-size: 24px;
-      text-align: center;
-      border: 2px solid #e9ecef;
-      border-radius: 8px;
-      font-family: 'Poppins', sans-serif;
-      letter-spacing: 8px;
-    }
-
-    .reset-modal-pin-input:focus {
-      outline: none;
-      border-color: #FF3B3B;
-    }
-
-    .reset-modal-pin-error {
-      color: #FF3B3B;
-      font-size: 13px;
-      margin-top: 8px;
-      display: none;
-    }
-
-    .reset-modal-buttons {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .reset-modal-button {
-      flex: 1;
-      padding: 14px;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 15px;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .reset-modal-button-cancel {
-      background: #e9ecef;
-      color: #6c757d;
-    }
-
-    .reset-modal-button-cancel:hover {
-      background: #dee2e6;
-    }
-
-    .reset-modal-button-reset {
-      background: #FF3B3B;
-      color: white;
-    }
-
-    .reset-modal-button-reset:hover:not(:disabled) {
-      background: #cc0000;
-    }
-
-    .reset-modal-button-reset:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    /* Main Metric */
-    .main-metric {
-      background: white;
-      padding: 32px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .main-metric .label {
-      font-size: 14px;
-      color: #6c757d;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .main-metric .value {
-      font-size: 56px;
-      font-weight: 700;
-      color: #151556;
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-
-    .main-metric .subvalue {
-      font-size: 18px;
-      color: #6c757d;
-    }
-
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-
-    .stat-card {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .stat-card .icon {
-      font-size: 24px;
-      margin-bottom: 8px;
-    }
-
-    .stat-card .label {
-      font-size: 13px;
-      color: #6c757d;
-      margin-bottom: 4px;
-    }
-
-    .stat-card .value {
-      font-size: 24px;
-      font-weight: 700;
-      color: #151556;
-    }
-
-    .stat-card .sublabel {
-      font-size: 12px;
-      color: #6c757d;
-      margin-top: 4px;
-    }
-
-    .stat-card.good .value {
-      color: #28a745;
-    }
-
-    .stat-card.warning .value {
-      color: #ffc107;
-    }
-
-    /* Alerts */
-    .alerts {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-
-    .alerts h3 {
-      font-size: 16px;
-      color: #151556;
-      margin-bottom: 12px;
-    }
-
-    .alert-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      background: #fff3cd;
-      border-left: 4px solid #ffc107;
-      border-radius: 4px;
-      margin-bottom: 8px;
-    }
-
-    .alert-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .alert-text {
-      font-size: 14px;
-      color: #856404;
-    }
-
-    .no-alerts {
-      text-align: center;
-      padding: 20px;
-      color: #6c757d;
-      font-size: 14px;
-    }
-
-    /* Activity Feed */
-    .activity-feed {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-
-    .activity-feed h3 {
-      font-size: 16px;
-      color: #151556;
-      margin-bottom: 12px;
-    }
-
-    .activity-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid #e9ecef;
-    }
-
-    .activity-item:last-child {
-      border-bottom: none;
-    }
-
-    .activity-item .name {
-      font-size: 14px;
-      font-weight: 600;
-      color: #151556;
-    }
-
-    .activity-item .action {
-      font-size: 13px;
-      color: #6c757d;
-    }
-
-    .activity-item .time {
-      font-size: 13px;
-      color: #6c757d;
-    }
-
-    /* Export Section */
-    .export-section {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-
-    .export-section h3 {
-      font-size: 16px;
-      color: #151556;
-      margin-bottom: 12px;
-    }
-
-    .export-buttons {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .export-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 20px;
-      background: #00BDFF;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-
-    .export-btn:hover {
-      background: #00a3e0;
-    }
-
-    .export-btn.secondary {
-      background: white;
-      color: #00BDFF;
-      border: 2px solid #00BDFF;
-    }
-
-    .export-btn.secondary:hover {
-      background: #f8f9fa;
-    }
-
-    /* Loading State */
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: #6c757d;
-    }
-
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid #e9ecef;
-      border-top-color: #00BDFF;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 16px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Last Updated */
-    .last-updated {
-      text-align: center;
-      color: #6c757d;
-      font-size: 12px;
-      margin-top: 20px;
-    }
-
-    /* Mobile Responsive */
-    @media (max-width: 600px) {
-      body {
-        padding: 12px;
-      }
-
-      .reset-button {
-        position: static;
-        margin: 0 auto 12px;
-      }
-
-      .main-metric {
-        padding: 24px;
-      }
-
-      .main-metric .value {
-        font-size: 42px;
-      }
-
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .export-buttons {
-        flex-direction: column;
-      }
-
-      .export-btn {
-        width: 100%;
-        justify-content: center;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <!-- Header -->
-    <div class="header">
-      <button class="reset-button" id="resetButton">
-        🔄 Reset Day
-      </button>
-      <div class="status-badge" id="statusBadge">
-        <span class="live-indicator"></span>
-        <span id="statusText">LOADING...</span>
-      </div>
-      <h1 id="distributionTitle">Distribution Dashboard</h1>
-      <p id="distributionTime">Loading...</p>
-    </div>
-
-    <!-- Loading State -->
-    <div id="loadingState" class="loading">
-      <div class="loading-spinner"></div>
-      <p>Loading distribution data...</p>
-    </div>
-
-    <!-- Main Content (hidden until loaded) -->
-    <div id="mainContent" style="display: none;">
-      
-      <!-- Main Metric -->
-      <div class="main-metric">
-        <div class="label">Total Served Today</div>
-        <div class="value" id="servedCount">0</div>
-        <div class="subvalue" id="peopleCount">0 people</div>
-      </div>
-
-      <!-- Stats Grid -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="label">Current Pace</div>
-          <div class="value" id="currentPace">--</div>
-          <div class="sublabel" id="paceLabel">households/hour</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="label">Projected Finish</div>
-          <div class="value" id="projectedFinish">--</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="label">In Line</div>
-          <div class="value" id="inLineCount">0</div>
-          <div class="sublabel">Checked in, not served</div>
-        </div>
-      </div>
-
-      <!-- Alerts -->
-      <div class="alerts">
-        <h3>Needs Attention</h3>
-        <div id="alertsContainer">
-          <div class="no-alerts">✓ No issues detected</div>
-        </div>
-      </div>
-
-      <!-- Recent Activity -->
-      <div class="activity-feed">
-        <h3>Recent Activity</h3>
-        <div id="activityContainer">
-          <div class="no-alerts">No activity yet</div>
-        </div>
-      </div>
-
-      <!-- Export Section -->
-      <div class="export-section">
-        <h3>Export Reports</h3>
-        <div class="export-buttons">
-          <a href="#" class="export-btn" id="exportLDAF">
-            <span>📊 Download LDAF Report</span>
-          </a>
-          <a href="#" class="export-btn secondary" id="exportActivity">
-            <span>📋 Download Activity Log</span>
-          </a>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Last Updated -->
-    <div class="last-updated" id="lastUpdated">
-      Last updated: --
-    </div>
-  </div>
-
-  <!-- Reset Modal -->
-  <div class="reset-modal-overlay" id="resetModal">
-    <div class="reset-modal">
-      <div class="reset-modal-header">
-        <div class="reset-modal-icon">⚠️</div>
-        <div class="reset-modal-title">Reset Distribution Day</div>
-      </div>
-
-      <div class="reset-modal-warning">
-        <div class="reset-modal-warning-title">This will clear all today's data:</div>
-        <ul class="reset-modal-stats">
-          <li>• <strong><span id="resetServedCount">0</span> served</strong></li>
-          <li>• All recent activity</li>
-        </ul>
-      </div>
-
-      <div class="reset-modal-archive">
-        ✓ Data will be preserved in Distribution Log
-      </div>
-
-      <div class="reset-modal-pin">
-        <label for="resetPinInput">Enter staff PIN to confirm:</label>
-        <input type="password" class="reset-modal-pin-input" id="resetPinInput" maxlength="4" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
-        <div class="reset-modal-pin-error" id="resetPinError">Incorrect PIN. Please try again.</div>
-      </div>
-
-      <div class="reset-modal-buttons">
-        <button class="reset-modal-button reset-modal-button-cancel" id="resetCancelBtn">Cancel</button>
-        <button class="reset-modal-button reset-modal-button-reset" id="resetConfirmBtn">Reset Distribution</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
+<script>
     // Configuration
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxaf_vQoT_63-VR1uE09LMBIw6zOuquyPqAkEh_uqsnefp2FTBzxnhz58HeMv0Jb30-/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzx1nBVKPcRxnEdALSi6pagTQKOMoXd_N6JVhY-jnm2ZByhW47VPCbd3dczYQKEzf8e/exec';
     const LDAF_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1573Lc2r18S36QQXsrh-iUlmjNd4aIFkbcNabEtHqkb8/edit';
     const REFRESH_INTERVAL = 30000; // 30 seconds
 
@@ -853,7 +153,6 @@
 
       document.getElementById('exportActivity').addEventListener('click', (e) => {
         e.preventDefault();
-        // Will open Distribution Log sheet
         alert('Distribution Log export coming soon');
       });
     }
@@ -899,64 +198,70 @@
       document.getElementById('resetModal').style.display = 'none';
     }
 
-  async function handleResetConfirm() {
-  const pin = document.getElementById('resetPinInput').value;
-  const pinError = document.getElementById('resetPinError');
-  const confirmBtn = document.getElementById('resetConfirmBtn');
-  
-  if (!pin || pin.length !== 4) {
-    pinError.style.display = 'block';
-    return;
-  }
-  
-  // Disable button during API call
-  confirmBtn.disabled = true;
-  confirmBtn.textContent = 'Resetting...';
-  
-  try {
-    const response = await fetch(`${API_URL}?action=resetDashboard&pin=${pin}`);
-    const data = await response.json();
-    
-    if (data.success) {
-  // Show what actually happened
-  const message = `Reset complete!\n\nProcessed: ${data.processed || 0} contacts\nErrors: ${data.errors || 0}`;
-  alert(message);
-  
-  // Show success message
-  confirmBtn.textContent = '✓ Reset Complete';
-  confirmBtn.style.background = '#28a745';
-  
-  // Wait for GHL to propagate changes (3 seconds)
-  setTimeout(() => {
-    hideResetModal();
-    
-    // Show loading state
-    document.getElementById('mainContent').style.display = 'none';
-    document.getElementById('loadingState').style.display = 'block';
-    document.getElementById('loadingState').innerHTML = `
-      <div class="loading-spinner"></div>
-      <p>Refreshing dashboard data...</p>
-    `;
-    
-    // Wait another 2 seconds, then reload fresh data
-    setTimeout(() => {
-      loadDashboardData();
-    }, 2000);
-  }, 1000);
-} else {
-  // Show error
-  pinError.textContent = data.message || 'Invalid PIN. Please try again.';
-  pinError.style.display = 'block';
-  confirmBtn.disabled = false;
-  confirmBtn.textContent = 'Reset Distribution';
-  
-  // Clear PIN input
-  document.getElementById('resetPinInput').value = '';
-  document.getElementById('resetPinInput').focus();
-}
+    async function handleResetConfirm() {
+      const pin = document.getElementById('resetPinInput').value;
+      const pinError = document.getElementById('resetPinError');
+      const confirmBtn = document.getElementById('resetConfirmBtn');
+      
+      if (!pin || pin.length !== 4) {
+        pinError.style.display = 'block';
+        return;
+      }
+      
+      // Disable button during API call
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = 'Resetting...';
+      
+      try {
+        const response = await fetch(`${API_URL}?action=resetDashboard&pin=${pin}`);
+        const data = await response.json();
+        
+        if (data.success) {
+          // Show what actually happened
+          const message = `Reset complete!\n\nProcessed: ${data.processed || 0} contacts\nErrors: ${data.errors || 0}`;
+          alert(message);
+          
+          // Show success message
+          confirmBtn.textContent = '✓ Reset Complete';
+          confirmBtn.style.background = '#28a745';
+          
+          // Wait for GHL to propagate changes (3 seconds)
+          setTimeout(() => {
+            hideResetModal();
+            
+            // Show loading state
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('loadingState').innerHTML = `
+              <div class="loading-spinner"></div>
+              <p>Refreshing dashboard data...</p>
+            `;
+            
+            // Wait another 2 seconds, then reload fresh data
+            setTimeout(() => {
+              loadDashboardData();
+            }, 2000);
+          }, 1000);
+        } else {
+          // Show error
+          pinError.textContent = data.message || 'Invalid PIN. Please try again.';
+          pinError.style.display = 'block';
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = 'Reset Distribution';
+          
+          // Clear PIN input
+          document.getElementById('resetPinInput').value = '';
+          document.getElementById('resetPinInput').focus();
+        }
+      } catch (error) {
+        console.error('Reset error:', error);
+        pinError.textContent = 'Network error. Please try again.';
+        pinError.style.display = 'block';
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Reset Distribution';
+      }
+    }
 
     // Start the dashboard
     init();
-  </script>
-</body>
-</html>
+</script>
